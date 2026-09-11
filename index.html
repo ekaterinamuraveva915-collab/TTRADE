@@ -64,9 +64,8 @@ header button:hover{background:var(--line)}
 .tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
 .tab{padding:8px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg2);color:var(--text);cursor:pointer;font-size:14px}
 .tab.active{background:var(--accent);color:var(--accent-text)}
-.badge{display:inline-block;padding:3px 9px;border-radius:20px;background:var(--line);font-size:12px;margin-right:6px}
-.stars{cursor:pointer;font-size:22px;color:#f59e0b;letter-spacing:2px;user-select:none}
 .trade{background:var(--card);border-radius:12px;padding:14px;margin-bottom:10px;box-shadow:0 2px 10px var(--shadow)}
+.stars{cursor:pointer;font-size:22px;color:#f59e0b;letter-spacing:2px;user-select:none}
 .empty{text-align:center;color:var(--muted);padding:40px;font-size:15px}
 .upload{border:2px dashed var(--line);border-radius:12px;padding:18px;text-align:center;color:var(--muted);cursor:pointer;margin:6px 0 12px}
 .upload:hover{border-color:var(--accent)}
@@ -125,7 +124,7 @@ header button:hover{background:var(--line)}
 <div id="toast" class="toast"></div>
 
 <script>
-/* ---------------- Фото (реальные, Unsplash) ---------------- */
+/* ---------- Реальные фото (Unsplash) ---------- */
 const photos={
   iphone:"https://images.unsplash.com/photo-1592286927505-2fd2e6e6f7b2?auto=format&fit=crop&w=900&q=85",
   nike:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85",
@@ -141,47 +140,47 @@ const photos={
   skate:"https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=900&q=85"
 };
 
-/* ---------------- Данные ---------------- */
+/* ---------- Данные по умолчанию ---------- */
 const defaultItems=[
-  {id:1,title:"iPhone 13",cat:"Электроника",owner:"Максим",rating:4.9,views:127,photos:[photos.iphone],cond:"Хорошее",want:"iPhone 14 / AirPods",money:"Доплата: 5 000 ₽",desc:"Аккуратный, без сколов, батарея 89%."},
-  {id:2,title:"Nike Air Max",cat:"Одежда",owner:"Алина",rating:4.8,views:89,photos:[photos.nike],cond:"Отличное",want:"Кроссовки Adidas / худи",money:"Без доплаты",desc:"42 размер, носил пару раз."},
-  {id:3,title:"Sony Alpha",cat:"Электроника",owner:"Дмитрий",rating:5,views:74,photos:[photos.camera],cond:"Отличное",want:"Объектив Sony / MacBook",money:"Доплата обсуждается",desc:"Полный комплект, чехол и ремень."},
-  {id:4,title:"Велосипед Trek",cat:"Спорт",owner:"Иван",rating:4.7,views:156,photos:[photos.bike],cond:"Хорошее",want:"Горный велосипед другого размера",money:"Доплата: 10 000 ₽",desc:"Рама L, обслужен."},
-  {id:5,title:"Гарри Поттер (комплект)",cat:"Книги",owner:"Мария",rating:4.9,views:53,photos:[photos.books],cond:"Хорошее",want:"Фантастика / комиксы",money:"Без доплаты",desc:"Все 7 книг, читались один раз."},
-  {id:6,title:"PlayStation 5",cat:"Электроника",owner:"Сергей",rating:4.9,views:201,photos:[photos.ps5],cond:"Отличное",want:"MacBook / Xbox Series X",money:"Доплата обсуждается",desc:"Дисковод, 2 геймпада."},
-  {id:7,title:"Кофемашина De'Longhi",cat:"Дом",owner:"Ольга",rating:4.6,views:42,photos:[photos.coffee],cond:"Хорошее",want:"Робот-пылесос",money:"Доплата: 3 000 ₽",desc:"Работает идеально, есть капучинатор."},
-  {id:8,title:"Рюкзак Nike",cat:"Одежда",owner:"Никита",rating:4.8,views:31,photos:[photos.backpack],cond:"Отличное",want:"Другой городской рюкзак",money:"Без доплаты",desc:"Вмещает ноутбук 15''."},
-  {id:9,title:"Гитара Yamaha",cat:"Другое",owner:"Артём",rating:4.7,views:64,photos:[photos.guitar],cond:"Хорошее",want:"Синтезатор / микрофон",money:"Без доплаты",desc:"Акустическая, звук отличный."},
-  {id:10,title:"MacBook Air M1",cat:"Электроника",owner:"Егор",rating:5,views:310,photos:[photos.laptop],cond:"Отличное",want:"iPad Pro / Windows-ноутбук",money:"Доплата: 15 000 ₽",desc:"8/256, цикл 120."},
-  {id:11,title:"Часы Casio",cat:"Другое",owner:"Павел",rating:4.8,views:22,photos:[photos.watch],cond:"Новое",want:"Фитнес-браслет",money:"Без доплаты",desc:"Не носились, коробка есть."},
-  {id:12,title:"Скейтборд",cat:"Спорт",owner:"Лена",rating:4.6,views:18,photos:[photos.skate],cond:"Хорошее",want:"Ролики / самокат",money:"Без доплаты",desc:"Доска 8.0, подвески целые."}
+  {id:1,title:"iPhone 13",cat:"Электроника",owner:"Максим",rating:4.9,views:127,photos:[photos.iphone],cond:"Хорошее",want:"iPhone 14 / AirPods",money:"Доплата: 5 000 ₽",desc:"Аккуратный, без сколов, батарея 89%.",mine:false},
+  {id:2,title:"Nike Air Max",cat:"Одежда",owner:"Алина",rating:4.8,views:89,photos:[photos.nike],cond:"Отличное",want:"Кроссовки Adidas / худи",money:"Без доплаты",desc:"42 размер, носил пару раз.",mine:false},
+  {id:3,title:"Sony Alpha",cat:"Электроника",owner:"Дмитрий",rating:5,views:74,photos:[photos.camera],cond:"Отличное",want:"Объектив Sony / MacBook",money:"Доплата обсуждается",desc:"Полный комплект, чехол и ремень.",mine:false},
+  {id:4,title:"Велосипед Trek",cat:"Спорт",owner:"Иван",rating:4.7,views:156,photos:[photos.bike],cond:"Хорошее",want:"Горный велосипед другого размера",money:"Доплата: 10 000 ₽",desc:"Рама L, обслужен.",mine:false},
+  {id:5,title:"Гарри Поттер (комплект)",cat:"Книги",owner:"Мария",rating:4.9,views:53,photos:[photos.books],cond:"Хорошее",want:"Фантастика / комиксы",money:"Без доплаты",desc:"Все 7 книг, читались один раз.",mine:false},
+  {id:6,title:"PlayStation 5",cat:"Электроника",owner:"Сергей",rating:4.9,views:201,photos:[photos.ps5],cond:"Отличное",want:"MacBook / Xbox Series X",money:"Доплата обсуждается",desc:"Дисковод, 2 геймпада.",mine:false},
+  {id:7,title:"Кофемашина De'Longhi",cat:"Дом",owner:"Ольга",rating:4.6,views:42,photos:[photos.coffee],cond:"Хорошее",want:"Робот-пылесос",money:"Доплата: 3 000 ₽",desc:"Работает идеально, есть капучинатор.",mine:false},
+  {id:8,title:"Рюкзак Nike",cat:"Одежда",owner:"Никита",rating:4.8,views:31,photos:[photos.backpack],cond:"Отличное",want:"Другой городской рюкзак",money:"Без доплаты",desc:"Вмещает ноутбук 15''.",mine:false},
+  {id:9,title:"Гитара Yamaha",cat:"Другое",owner:"Артём",rating:4.7,views:64,photos:[photos.guitar],cond:"Хорошее",want:"Синтезатор / микрофон",money:"Без доплаты",desc:"Акустическая, звук отличный.",mine:false},
+  {id:10,title:"MacBook Air M1",cat:"Электроника",owner:"Егор",rating:5,views:310,photos:[photos.laptop],cond:"Отличное",want:"iPad Pro / Windows-ноутбук",money:"Доплата: 15 000 ₽",desc:"8/256, цикл 120.",mine:false},
+  {id:11,title:"Часы Casio",cat:"Другое",owner:"Павел",rating:4.8,views:22,photos:[photos.watch],cond:"Новое",want:"Фитнес-браслет",money:"Без доплаты",desc:"Не носились, коробка есть.",mine:false},
+  {id:12,title:"Скейтборд",cat:"Спорт",owner:"Лена",rating:4.6,views:18,photos:[photos.skate],cond:"Хорошее",want:"Ролики / самокат",money:"Без доплаты",desc:"Доска 8.0, подвески целые.",mine:false}
 ];
 
-/* ---------------- Состояние ---------------- */
+/* ---------- Хранилище ---------- */
 const LS={
-  get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},
+  get:(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v===null?d:v}catch{return d}},
   set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))
 };
 let items=LS.get("tradeItems",defaultItems);
 let favorites=new Set(LS.get("tradeFav",[]));
 let trades=LS.get("tradeTrades",[]);
-let myItems=LS.get("tradeMyItems",[]);
 let chatHistory=LS.get("tradeChat",[
-  {me:false,text:"Привет! Интересует твой iPhone 👋"},
-  {me:true,text:"Могу предложить AirPods + доплату."}
+  {with:"Максим",me:false,text:"Привет! Интересует твой iPhone 👋"},
+  {with:"Максим",me:true,text:"Могу предложить AirPods + доплату."}
 ]);
 let ratings=LS.get("tradeRatings",{});
-let savedScroll=0;
+let currentItem=null;
+let currentChat="Максим";
 
 const cats=["Все","Электроника","Одежда","Книги","Спорт","Дом","Другое"];
 let cat="Все";
 
-/* ---------------- Тема ---------------- */
+/* ---------- Тема ---------- */
 function applyTheme(t){
   const sysDark=window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const effective=t==="auto"?(sysDark?"dark":"light"):t;
-  document.documentElement.setAttribute("data-theme",effective);
-  document.getElementById("themeBtn").textContent=effective==="dark"?"☀️ Тема":"🌙 Тема";
+  const eff=t==="auto"?(sysDark?"dark":"light"):t;
+  document.documentElement.setAttribute("data-theme",eff);
+  document.getElementById("themeBtn").textContent=eff==="dark"?"☀️ Тема":"🌙 Тема";
 }
 function toggleTheme(){
   const cur=document.documentElement.getAttribute("data-theme")||"light";
@@ -190,7 +189,10 @@ function toggleTheme(){
 }
 applyTheme(LS.get("tradeTheme","light"));
 
-/* ---------------- Рендер ---------------- */
+/* ---------- Экранирование ---------- */
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+/* ---------- Рендер каталога ---------- */
 function renderChips(){
   document.getElementById("chips").innerHTML=cats.map(c=>
     `<button class="chip ${c===cat?'active':''}" onclick="cat='${c}';renderChips();render()">${c}</button>`
@@ -220,18 +222,18 @@ function render(){
   grid.innerHTML=list.map(x=>`
     <article class="card" onclick="detail(${x.id})">
       <div class="photo">
-        <img src="${x.photos[0]}" alt="${x.title}" loading="lazy">
+        <img src="${x.photos[0]}" alt="${esc(x.title)}" loading="lazy">
         <button class="heart" onclick="event.stopPropagation();fav(${x.id})">${favorites.has(x.id)?"❤️":"♡"}</button>
       </div>
       <div class="body">
-        <h3>${x.title}</h3>
-        <div class="meta">${x.cat} · ${x.owner} · ⭐ ${x.rating} · 👁 ${x.views}</div>
-        <div class="want"><b>Хочу:</b> ${x.want}</div>
-        <div class="money">${x.money}</div>
+        <h3>${esc(x.title)}</h3>
+        <div class="meta">${esc(x.cat)} · ${esc(x.owner)} · ⭐ ${x.rating} · 👁 ${x.views}</div>
+        <div class="want"><b>Хочу:</b> ${esc(x.want)}</div>
+        <div class="money">${esc(x.money)}</div>
       </div>
     </article>`).join("");
   document.getElementById("stItems").textContent=items.length;
-  document.getElementById("stTrades").textContent=trades.filter(t=>t.status==="принят").length+846;
+  document.getElementById("stTrades").textContent=trades.filter(t=>t.status==="принят").length;
 }
 function fav(id){
   favorites.has(id)?favorites.delete(id):favorites.add(id);
@@ -243,49 +245,49 @@ function showFav(){
   const list=items.filter(x=>favorites.has(x.id));
   document.getElementById("grid").innerHTML=list.map(x=>`
     <article class="card" onclick="detail(${x.id})">
-      <div class="photo"><img src="${x.photos[0]}"></div>
-      <div class="body"><h3>${x.title}</h3>
-      <div class="meta">${x.cat} · ⭐ ${x.rating}</div>
-      <div class="money">${x.money}</div></div>
+      <div class="photo"><img src="${x.photos[0]}" alt="${esc(x.title)}"></div>
+      <div class="body"><h3>${esc(x.title)}</h3>
+      <div class="meta">${esc(x.cat)} · ⭐ ${x.rating}</div>
+      <div class="money">${esc(x.money)}</div></div>
     </article>`).join("");
 }
 
-/* ---------------- Детальная ---------------- */
-let currentIdx=0;
+/* ---------- Детальная карточка ---------- */
 function detail(id){
-  const x=items.find(i=>i.id===id);if(!x)return;currentIdx=0;
-  const content=document.getElementById("content");
-  content.innerHTML=`
-    <img id="mainImg" class="detailimg" src="${x.photos[0]}">
-    <div class="thumbs">${x.photos.map((p,i)=>`<img src="${p}" class="${i===0?'active':''}" onclick="switchImg(${i},this)">`).join("")}</div>
-    <h2 style="margin-top:14px">${x.title}</h2>
-    <p style="color:var(--muted);font-size:14px">${x.cat} · Состояние: <b>${x.cond}</b></p>
-    <p>👤 ${x.owner} · ⭐ <b>${x.rating}</b> · 👁 ${x.views}</p>
-    <p>${x.desc}</p>
-    <p><b>Ищу в обмен:</b><br>${x.want}</p>
-    <p><b>${x.money}</b></p>
+  currentItem=items.find(i=>i.id===id);
+  if(!currentItem)return;
+  const x=currentItem;
+  document.getElementById("content").innerHTML=`
+    <img id="mainImg" class="detailimg" src="${x.photos[0]}" alt="${esc(x.title)}">
+    <div class="thumbs">${x.photos.map((p,i)=>`<img src="${p}" class="${i===0?'active':''}" onclick="switchImg(${i},this)" alt="">`).join("")}</div>
+    <h2 style="margin-top:14px">${esc(x.title)}</h2>
+    <p style="color:var(--muted);font-size:14px">${esc(x.cat)} · Состояние: <b>${esc(x.cond)}</b></p>
+    <p>👤 ${esc(x.owner)} · ⭐ <b>${x.rating}</b> · 👁 ${x.views}</p>
+    <p>${esc(x.desc)}</p>
+    <p><b>Ищу в обмен:</b><br>${esc(x.want)}</p>
+    <p><b>${esc(x.money)}</b></p>
     <button class="btn" onclick="offerModal(${x.id})">🔄 Предложить обмен</button>
-    <button class="btn light" onclick="openChat('${x.owner}','${x.title}')">💬 Написать владельцу</button>
+    <button class="btn light" onclick="openChat('${esc(x.owner)}','${esc(x.title)}')">💬 Написать владельцу</button>
     <button class="btn light" onclick="fav(${x.id});closeModal()">❤️ В избранное</button>`;
   openModal();
 }
 function switchImg(i,el){
-  currentIdx=i;
-  document.getElementById("mainImg").src=items.find(x=>true).photos?el.src:el.src;
+  if(!currentItem)return;
+  document.getElementById("mainImg").src=currentItem.photos[i];
   document.querySelectorAll(".thumbs img").forEach(t=>t.classList.remove("active"));
   el.classList.add("active");
 }
 
-/* ---------------- Обмен ---------------- */
+/* ---------- Предложение обмена ---------- */
 function offerModal(targetId){
   const target=items.find(i=>i.id===targetId);
-  const mine=items.filter(i=>i.owner==="Алексей"||i.mine);
+  const mine=items.filter(i=>i.mine);
   const opts=mine.length
-    ? mine.map(i=>`<option value="${i.id}">${i.title}</option>`).join("")
+    ? mine.map(i=>`<option value="${i.id}">${esc(i.title)}</option>`).join("")
     : `<option value="">— сначала добавьте свой товар —</option>`;
   document.getElementById("content").innerHTML=`
     <h2>Предложить обмен</h2>
-    <p>Вы хотите: <b>${target.title}</b> (${target.owner})</p>
+    <p>Вы хотите: <b>${esc(target.title)}</b> (${esc(target.owner)})</p>
     <label>Ваш товар взамен:</label>
     <select id="myItem" class="field">${opts}</select>
     <label>Доплата (₽, необязательно):</label>
@@ -303,7 +305,8 @@ function sendOffer(targetId){
   if(!mine){toast("Сначала добавьте свой товар");return}
   const money=document.getElementById("myMoney").value;
   trades.unshift({
-    id:Date.now(),target:target.title,targetOwner:target.owner,
+    id:crypto.randomUUID(),
+    target:target.title,targetOwner:target.owner,
     my:mine.title,money:money?`+${money} ₽`:"без доплаты",
     status:"предложен",date:new Date().toLocaleString("ru")
   });
@@ -311,15 +314,14 @@ function sendOffer(targetId){
   closeModal();toast("Предложение отправлено ✅");render();
 }
 
-/* ---------------- Профиль ---------------- */
+/* ---------- Профиль ---------- */
 function openProfile(){
-  const content=document.getElementById("content");
   const active=trades.filter(t=>t.status==="предложен");
   const done=trades.filter(t=>t.status==="принят");
-  content.innerHTML=`
+  document.getElementById("content").innerHTML=`
     <h2>Профиль</h2>
     <h3>Алексей ⭐ 4.9</h3>
-    <p style="color:var(--muted)">18 завершённых обменов · ${favorites.size} в избранном</p>
+    <p style="color:var(--muted)">${done.length} завершённых обменов · ${favorites.size} в избранном</p>
     <div class="tabs">
       <button class="tab active" onclick="ptab('active',this)">Активные (${active.length})</button>
       <button class="tab" onclick="ptab('done',this)">Завершённые (${done.length})</button>
@@ -335,20 +337,20 @@ function ptab(tab,el){
     const list=trades.filter(t=>t.status==="предложен");
     box.innerHTML=list.length?list.map(t=>`
       <div class="trade">
-        <b>${t.my} ↔ ${t.target}</b>
-        <div class="meta">с ${t.targetOwner} · ${t.money} · ${t.date}</div>
+        <b>${esc(t.my)} ↔ ${esc(t.target)}</b>
+        <div class="meta">с ${esc(t.targetOwner)} · ${esc(t.money)} · ${esc(t.date)}</div>
         <div style="margin-top:8px">
-          <button class="btn" onclick="setTrade(${t.id},'принят')">Принять</button>
-          <button class="btn light" onclick="setTrade(${t.id},'отклонён')">Отклонить</button>
+          <button class="btn" onclick="setTrade('${t.id}','принят')">Принять</button>
+          <button class="btn light" onclick="setTrade('${t.id}','отклонён')">Отклонить</button>
         </div>
       </div>`).join(""):'<div class="empty">Нет активных предложений</div>';
   } else if(tab==="done"){
     const list=trades.filter(t=>t.status==="принят");
     box.innerHTML=list.length?list.map(t=>`
       <div class="trade">
-        <b>${t.my} ↔ ${t.target}</b>
-        <div class="meta">с ${t.targetOwner} · завершён</div>
-        <div style="margin-top:6px">Оценка: <span class="stars" onclick="rate(${t.id},event)">${"★".repeat(ratings[t.id]||0)}${"☆".repeat(5-(ratings[t.id]||0))}</span></div>
+        <b>${esc(t.my)} ↔ ${esc(t.target)}</b>
+        <div class="meta">с ${esc(t.targetOwner)} · завершён</div>
+        <div style="margin-top:6px">Оценка: <span class="stars" onclick="rate('${t.id}',event)">${"★".repeat(ratings[t.id]||0)}${"☆".repeat(5-(ratings[t.id]||0))}</span></div>
       </div>`).join(""):'<div class="empty">Пока нет завершённых обменов</div>';
   } else {
     box.innerHTML=`
@@ -364,7 +366,7 @@ function ptab(tab,el){
   }
 }
 function setTrade(id,status){
-  const t=trades.find(x=>x.id===id);if(!t)return;
+  const t=trades.find(x=>String(x.id)===String(id));if(!t)return;
   t.status=status;LS.set("tradeTrades",trades);
   toast(status==="принят"?"Обмен принят 🎉":"Обмен отклонён");
   openProfile();
@@ -401,9 +403,17 @@ function importData(e){
   r.readAsText(f);
 }
 
-/* ---------------- Чат ---------------- */
+/* ---------- Чат ---------- */
 function openChat(owner,itemTitle){
-  const content=document.getElementById("content");
-  const title=owner?`Чат с ${owner}${itemTitle?" · "+itemTitle:""}`:"Чат";
-  content.innerHTML=`
-    <h2
+  if(owner)currentChat=owner;
+  const title=owner?`Чат с ${esc(owner)}${itemTitle?" · "+esc(itemTitle):""}`:"Чат";
+  document.getElementById("content").innerHTML=`
+    <h2>💬 ${title}</h2>
+    <div id="chatwrap" class="chatwrap"></div>
+    <input id="chatInput" class="field" placeholder="Написать сообщение..." onkeydown="if(event.key==='Enter')sendChat()">
+    <button class="btn" onclick="sendChat()">Отправить</button>
+    <p style="color:var(--muted);font-size:13px;margin-top:10px">Ссылки блокируются · защита от спама</p>`;
+  openModal();renderChat();
+}
+function renderChat(){
+  const wrap=document
