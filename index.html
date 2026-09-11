@@ -1,48 +1,50 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TRADE — Обмен вещами</title>
 
   <style>
     :root {
-      --bg: #f5f6fa;
-      --surface: #ffffff;
-      --surface-2: #eef0f5;
-      --text: #20232b;
-      --muted: #777d8b;
-      --border: #e2e5ec;
-      --accent: #5b5ce2;
-      --accent-hover: #4849c9;
-      --danger: #e5484d;
-      --success: #2da66f;
-      --shadow: 0 10px 30px rgba(30, 35, 60, 0.08);
-      --radius: 18px;
+      --accent: #ff7a00;
+      --accent-hover: #ff9638;
+      --bg: #0b0d10;
+      --surface: #15191f;
+      --surface-2: #202630;
+      --text: #f5f7fa;
+      --muted: #9da8b6;
+      --border: #303946;
+      --danger: #ff5570;
+      --success: #36d27b;
+      --warning: #f4b942;
+      --shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
     }
 
-    body.dark {
-      --bg: #15161c;
-      --surface: #20222b;
-      --surface-2: #2b2e39;
-      --text: #f4f5f8;
-      --muted: #a4a8b5;
-      --border: #393c48;
-      --accent: #7778ff;
-      --accent-hover: #9293ff;
-      --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    body.light {
+      --bg: #f3f5f8;
+      --surface: #ffffff;
+      --surface-2: #edf0f4;
+      --text: #17202a;
+      --muted: #687585;
+      --border: #d8dee7;
+      --shadow: 0 15px 45px rgba(20, 30, 50, 0.08);
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      min-width: 320px;
       background: var(--bg);
       color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
       transition: background 0.2s, color 0.2s;
     }
 
@@ -57,58 +59,73 @@
       cursor: pointer;
     }
 
+    img {
+      max-width: 100%;
+    }
+
     a {
-      color: inherit;
+      color: var(--accent);
       text-decoration: none;
     }
 
+    a:hover {
+      text-decoration: underline;
+    }
+
     .container {
-      width: min(1180px, calc(100% - 32px));
+      width: min(1240px, calc(100% - 32px));
       margin: 0 auto;
     }
 
     .header {
       position: sticky;
       top: 0;
-      z-index: 20;
-      background: var(--surface);
+      z-index: 50;
+      background: var(--bg);
       border-bottom: 1px solid var(--border);
     }
 
     .header-inner {
-      min-height: 72px;
+      min-height: 74px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 20px;
+      gap: 24px;
     }
 
     .logo {
-      font-size: 25px;
-      font-weight: 900;
-      letter-spacing: -1px;
       color: var(--accent);
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      white-space: nowrap;
+    }
+
+    .logo span {
+      color: var(--text);
     }
 
     .nav {
       display: flex;
       align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
+      gap: 5px;
+      flex: 1;
+      overflow-x: auto;
     }
 
-    .nav button,
-    .icon-button {
+    .nav button {
       border: 0;
       background: transparent;
-      color: var(--text);
+      color: var(--muted);
       padding: 10px 12px;
       border-radius: 10px;
+      font-weight: 700;
+      white-space: nowrap;
     }
 
     .nav button:hover,
-    .icon-button:hover {
+    .nav button.active {
       background: var(--surface-2);
+      color: var(--text);
     }
 
     .header-actions {
@@ -117,410 +134,742 @@
       gap: 8px;
     }
 
-    .main {
-      padding: 35px 0 60px;
+    .icon-btn,
+    .small-btn,
+    .secondary {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 11px;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      font-size: 18px;
+      position: relative;
+    }
+
+    .icon-btn:hover,
+    .small-btn:hover,
+    .secondary:hover {
+      border-color: var(--accent);
+    }
+
+    .small-btn {
+      padding: 9px 12px;
+    }
+
+    .primary,
+    .danger,
+    .secondary {
+      border-radius: 12px;
+      padding: 12px 17px;
+      font-weight: 800;
+    }
+
+    .primary {
+      border: 0;
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .danger {
+      border: 0;
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .success-btn {
+      border: 0;
+      background: var(--success);
+      color: #062b16;
+      border-radius: 12px;
+      padding: 12px 17px;
+      font-weight: 800;
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      max-width: 190px;
+      padding: 8px 11px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .user-chip-avatar {
+      width: 27px;
+      height: 27px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--accent);
+    }
+
+    .user-chip-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 7px;
     }
 
     .hero {
       display: grid;
-      grid-template-columns: 1.3fr 1fr;
-      gap: 25px;
-      align-items: stretch;
-      margin-bottom: 30px;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 18px;
+      margin-top: 30px;
     }
 
-    .hero-content {
-      background: linear-gradient(135deg, var(--accent), #9293ff);
-      color: white;
-      border-radius: 26px;
-      padding: 40px;
-      min-height: 300px;
+    .hero-main {
+      position: relative;
+      overflow: hidden;
+      min-height: 360px;
+      padding: 42px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, var(--accent), #d83d00);
+      color: #fff;
+    }
+
+    .hero-main::after {
+      content: "⇄";
+      position: absolute;
+      right: 20px;
+      bottom: -65px;
+      font-size: 280px;
+      font-weight: 900;
+      opacity: 0.13;
+      transform: rotate(-15deg);
+    }
+
+    .hero-main > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-main h1 {
+      margin: 0 0 20px;
+      max-width: 650px;
+      font-size: clamp(38px, 5vw, 68px);
+      line-height: 0.98;
+      letter-spacing: -3px;
+    }
+
+    .hero-main p {
+      max-width: 590px;
+      line-height: 1.6;
+    }
+
+    .hero-main .primary {
+      margin-top: 14px;
+      background: #fff;
+      color: #c94a00;
+    }
+
+    .stats-card {
       display: flex;
       flex-direction: column;
       justify-content: center;
+      gap: 22px;
+      padding: 26px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
     }
 
-    .hero-content h1 {
-      margin: 0 0 15px;
-      font-size: clamp(32px, 5vw, 58px);
-      line-height: 1;
-    }
-
-    .hero-content p {
-      margin: 0 0 25px;
-      max-width: 480px;
-      line-height: 1.6;
-      opacity: 0.9;
-    }
-
-    .hero-image {
-      min-height: 300px;
-      border-radius: 26px;
-      background:
-        linear-gradient(135deg, rgba(91, 92, 226, 0.15), rgba(255,255,255,0.1)),
-        url("https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1000&q=80")
-        center / cover;
-    }
-
-    .button {
-      border: 0;
-      background: var(--accent);
-      color: white;
-      border-radius: 11px;
-      padding: 12px 18px;
-      font-weight: 700;
-      transition: 0.2s;
-    }
-
-    .button:hover {
-      background: var(--accent-hover);
-      transform: translateY(-1px);
-    }
-
-    .button.secondary {
-      background: var(--surface-2);
-      color: var(--text);
-    }
-
-    .button.secondary:hover {
-      background: var(--border);
-    }
-
-    .button.danger {
-      background: var(--danger);
-    }
-
-    .button.success {
-      background: var(--success);
-    }
-
-    .button.small {
-      padding: 8px 12px;
-      font-size: 13px;
-    }
-
-    .section-header {
+    .stat {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 15px;
-      margin: 30px 0 18px;
-    }
-
-    .section-header h2 {
-      margin: 0;
-      font-size: 25px;
-    }
-
-    .filters {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr 1fr;
+      align-items: center;
       gap: 12px;
-      margin-bottom: 22px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 17px;
+    }
+
+    .stat:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .stat strong {
+      font-size: 32px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: right;
+    }
+
+    .section {
+      margin-top: 44px;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 29px;
+      letter-spacing: -1px;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 7px 0 0;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 190px 190px 130px;
+      gap: 10px;
+      margin-bottom: 13px;
     }
 
     .input,
-    .textarea,
-    .select {
+    .select,
+    .textarea {
       width: 100%;
+      padding: 13px 14px;
       border: 1px solid var(--border);
       background: var(--surface);
       color: var(--text);
-      border-radius: 11px;
-      padding: 12px 14px;
+      border-radius: 12px;
       outline: none;
     }
 
     .input:focus,
-    .textarea:focus,
-    .select:focus {
+    .select:focus,
+    .textarea:focus {
       border-color: var(--accent);
     }
 
     .textarea {
+      min-height: 105px;
       resize: vertical;
-      min-height: 100px;
     }
 
     .categories {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
     }
 
-    .category-button {
-      border: 1px solid var(--border);
+    .category {
+      white-space: nowrap;
+      padding: 10px 15px;
+      border-radius: 999px;
       background: var(--surface);
-      color: var(--text);
-      border-radius: 30px;
-      padding: 9px 15px;
-      cursor: pointer;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      font-weight: 800;
     }
 
-    .category-button.active,
-    .category-button:hover {
+    .category.active,
+    .category:hover {
       background: var(--accent);
+      color: #fff;
       border-color: var(--accent);
-      color: white;
     }
 
-    .products-grid {
+    .products {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-    }
-
-    .product-card {
-      overflow: hidden;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      transition: 0.2s;
-    }
-
-    .product-card:hover {
-      transform: translateY(-4px);
-    }
-
-    .product-image {
-      position: relative;
-      width: 100%;
-      height: 210px;
-      background: var(--surface-2);
-      overflow: hidden;
-    }
-
-    .product-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .favorite-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 36px;
-      height: 36px;
-      border: 0;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.9);
-      font-size: 19px;
-    }
-
-    .product-info {
-      padding: 15px;
-    }
-
-    .product-info h3 {
-      margin: 0 0 8px;
-      font-size: 17px;
-    }
-
-    .product-description {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
-      min-height: 39px;
-    }
-
-    .product-meta {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      margin: 13px 0;
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .product-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .status {
-      display: inline-block;
-      border-radius: 20px;
-      padding: 5px 9px;
-      font-size: 11px;
-      font-weight: 700;
-      background: var(--surface-2);
-      color: var(--muted);
-    }
-
-    .status.available {
-      background: rgba(45, 166, 111, 0.15);
-      color: var(--success);
-    }
-
-    .status.pending {
-      background: rgba(245, 166, 35, 0.15);
-      color: #c27a00;
-    }
-
-    .status.traded {
-      background: rgba(120, 120, 130, 0.18);
-      color: var(--muted);
-    }
-
-    .empty {
-      background: var(--surface);
-      border: 1px dashed var(--border);
-      color: var(--muted);
-      border-radius: var(--radius);
-      padding: 35px;
-      text-align: center;
-      grid-column: 1 / -1;
-    }
-
-    .profile-layout {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 22px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
     }
 
     .card {
+      min-width: 0;
+      overflow: hidden;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: 18px;
+      transition: 0.2s;
       box-shadow: var(--shadow);
-      padding: 22px;
     }
 
-    .profile-card {
-      text-align: center;
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: #738092;
     }
 
-    .avatar {
-      width: 100px;
-      height: 100px;
-      margin: 0 auto 15px;
-      border-radius: 50%;
-      background: var(--accent);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 36px;
-      font-weight: 800;
+    .visual {
+      position: relative;
+      height: 210px;
       overflow: hidden;
+      background: var(--surface-2);
     }
 
-    .avatar img {
+    .visual img {
+      display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .profile-card h2 {
-      margin: 0 0 5px;
+    .tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 6px 9px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
     }
 
-    .profile-card p {
-      color: var(--muted);
-      margin: 5px 0;
+    .status-badge {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      padding: 6px 9px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.72);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
     }
 
-    .profile-menu {
-      display: grid;
-      gap: 8px;
-      margin-top: 22px;
-    }
-
-    .profile-menu button {
+    .heart {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 37px;
+      height: 37px;
       border: 0;
-      padding: 11px;
-      border-radius: 10px;
-      background: transparent;
-      color: var(--text);
-      text-align: left;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      font-size: 20px;
     }
 
-    .profile-menu button:hover,
-    .profile-menu button.active {
-      background: var(--surface-2);
-      color: var(--accent);
+    .heart.active {
+      color: #ff5470;
     }
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
+    .card-body {
+      padding: 15px;
     }
 
-    .form-group {
-      margin-bottom: 15px;
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+      line-height: 1.25;
     }
 
-    .form-group.full {
-      grid-column: 1 / -1;
-    }
-
-    .form-group label {
-      display: block;
+    .desc {
+      min-height: 40px;
+      margin: 0 0 12px;
+      color: var(--muted);
       font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 7px;
+      line-height: 1.45;
     }
 
-    .modal-overlay {
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 13px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .actions button {
+      flex: 1;
+      min-width: 90px;
+      padding: 10px 7px;
+      font-size: 12px;
+    }
+
+    .empty {
+      grid-column: 1 / -1;
+      padding: 48px 20px;
+      border: 1px dashed var(--border);
+      border-radius: 18px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .feature {
+      padding: 23px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+    }
+
+    .feature .emoji {
+      font-size: 30px;
+      margin-bottom: 13px;
+    }
+
+    .feature h3 {
+      margin: 0 0 8px;
+    }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .footer {
+      margin-top: 60px;
+      padding: 28px 0;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .modal-bg {
       position: fixed;
       inset: 0;
       z-index: 100;
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.55);
+      padding: 18px;
+      background: rgba(0, 0, 0, 0.72);
     }
 
-    .modal-overlay.open {
+    .modal-bg.open {
       display: flex;
     }
 
     .modal {
-      width: min(560px, 100%);
-      max-height: 90vh;
+      position: relative;
+      width: min(600px, 100%);
+      max-height: 93vh;
       overflow-y: auto;
-      background: var(--surface);
-      color: var(--text);
-      border-radius: 22px;
       padding: 25px;
-      box-shadow: 0 25px 80px rgba(0,0,0,0.25);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
     }
 
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      margin-bottom: 20px;
+    .modal.wide {
+      width: min(900px, 100%);
     }
 
-    .modal-header h2 {
-      margin: 0;
-    }
-
-    .close-button {
-      width: 35px;
-      height: 35px;
+    .close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 34px;
+      height: 34px;
       border: 0;
       border-radius: 50%;
       background: var(--surface-2);
       color: var(--text);
-      font-size: 20px;
+      font-size: 19px;
     }
 
-    .modal-actions {
+    .modal h2 {
+      margin: 0 35px 20px 0;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .form-actions {
       display: flex;
       justify-content: flex-end;
-      gap: 10px;
+      gap: 9px;
       margin-top: 20px;
       flex-wrap: wrap;
+    }
+
+    .detail-img {
+      width: 100%;
+      height: 310px;
+      object-fit: cover;
+      border-radius: 15px;
+      margin-bottom: 18px;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-row span {
+      color: var(--muted);
+    }
+
+    .profile-head {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .avatar {
+      width: 82px;
+      height: 82px;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      background: var(--surface-2);
+    }
+
+    .profile-head h3 {
+      margin: 0 0 5px;
+      font-size: 23px;
+    }
+
+    .profile-head p {
+      margin: 4px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .profile-stat {
+      padding: 15px;
+      border-radius: 12px;
+      background: var(--surface-2);
+      text-align: center;
+    }
+
+    .profile-stat strong {
+      display: block;
+      font-size: 21px;
+    }
+
+    .profile-stat span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .list {
+      display: grid;
+      gap: 11px;
+    }
+
+    .list-item {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface-2);
+    }
+
+    .list-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 7px;
+    }
+
+    .status {
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .chat {
+      display: grid;
+      gap: 10px;
+      max-height: 350px;
+      overflow-y: auto;
+    }
+
+    .message {
+      max-width: 85%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: var(--surface-2);
+    }
+
+    .message.me {
+      margin-left: auto;
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .message small {
+      display: block;
+      margin-top: 5px;
+      opacity: 0.65;
+      font-size: 10px;
+    }
+
+    .chat-form {
+      display: flex;
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    .chat-form .input {
+      flex: 1;
+    }
+
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 18px 0;
+    }
+
+    .color-choice {
+      min-height: 65px;
+      border: 2px solid transparent;
+      border-radius: 13px;
+      color: #fff;
+      font-weight: 900;
+      text-shadow: 0 1px 4px #000;
+    }
+
+    .color-choice:hover {
+      border-color: var(--text);
+    }
+
+    .notice {
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-2);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 300;
+      display: none;
+      max-width: 350px;
+      padding: 14px 17px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+
+    .toast.show {
+      display: block;
+    }
+
+    .rating-stars {
+      color: #ffc107;
+      letter-spacing: 2px;
+    }
+
+    .review {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: var(--surface-2);
+    }
+
+    .review strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .review p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .wish-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: var(--surface-2);
+    }
+
+    .wish-item span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .notification {
+      padding: 13px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .notification:last-child {
+      border-bottom: 0;
+    }
+
+    .notification.unread {
+      border-left: 3px solid var(--accent);
+      background: var(--surface-2);
+    }
+
+    .notification small {
+      display: block;
+      color: var(--muted);
+      margin-top: 5px;
     }
 
     .auth-tabs {
@@ -531,2122 +880,1729 @@
 
     .auth-tab {
       flex: 1;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
       padding: 11px;
-      border-radius: 10px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: var(--surface-2);
+      color: var(--muted);
+      font-weight: 800;
     }
 
     .auth-tab.active {
       background: var(--accent);
-      color: white;
       border-color: var(--accent);
+      color: #fff;
     }
 
-    .error-message {
+    .auth-error {
       display: none;
-      color: var(--danger);
-      background: rgba(229, 72, 77, 0.1);
-      border-radius: 10px;
-      padding: 10px;
-      font-size: 13px;
       margin-bottom: 15px;
+      padding: 11px 13px;
+      border: 1px solid rgba(255, 85, 112, 0.5);
+      border-radius: 11px;
+      background: rgba(255, 85, 112, 0.1);
+      color: var(--danger);
+      font-size: 13px;
+      line-height: 1.45;
     }
 
-    .error-message.show {
+    .auth-error.show {
       display: block;
     }
 
-    .toast {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      z-index: 200;
-      max-width: 340px;
-      background: var(--text);
-      color: var(--surface);
-      padding: 14px 18px;
-      border-radius: 12px;
-      box-shadow: var(--shadow);
-      transform: translateY(30px);
-      opacity: 0;
-      pointer-events: none;
-      transition: 0.25s;
-    }
-
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    .account-button {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      max-width: 160px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .offer-list,
-    .chat-list,
-    .history-list,
-    .wishlist-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .offer-item,
-    .chat-item,
-    .history-item,
-    .wishlist-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      padding: 15px;
+    .account-menu {
+      display: none;
+      position: absolute;
+      top: 62px;
+      right: 0;
+      width: 220px;
+      padding: 10px;
       border: 1px solid var(--border);
+      border-radius: 15px;
       background: var(--surface);
-      border-radius: 14px;
+      box-shadow: var(--shadow);
+      z-index: 70;
     }
 
-    .offer-item-info,
-    .chat-item-info,
-    .history-item-info {
-      min-width: 0;
+    .account-menu.open {
+      display: block;
     }
 
-    .offer-item-info h3,
-    .chat-item-info h3,
-    .history-item-info h3 {
-      margin: 0 0 5px;
-      font-size: 15px;
+    .account-menu button {
+      display: block;
+      width: 100%;
+      padding: 11px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: var(--text);
+      text-align: left;
+      font-weight: 700;
     }
 
-    .offer-item-info p,
-    .chat-item-info p,
-    .history-item-info p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
+    .account-menu button:hover {
+      background: var(--surface-2);
     }
 
-    .offer-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .footer {
-      padding: 30px 0;
-      color: var(--muted);
-      text-align: center;
-      border-top: 1px solid var(--border);
+    .account-wrapper {
+      position: relative;
     }
 
     .hidden {
       display: none !important;
     }
 
-    @media (max-width: 1000px) {
-      .products-grid {
-        grid-template-columns: repeat(3, 1fr);
+    @media (max-width: 1100px) {
+      .products {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
-    }
 
-    @media (max-width: 760px) {
-      .header-inner {
-        flex-wrap: wrap;
-        padding: 12px 0;
+      .toolbar {
+        grid-template-columns: 1fr 1fr;
       }
 
       .hero {
         grid-template-columns: 1fr;
       }
-
-      .hero-content {
-        padding: 30px;
-      }
-
-      .hero-image {
-        min-height: 220px;
-      }
-
-      .filters {
-        grid-template-columns: 1fr;
-      }
-
-      .products-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .profile-layout {
-        grid-template-columns: 1fr;
-      }
-
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .form-group.full {
-        grid-column: auto;
-      }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 760px) {
       .container {
-        width: min(100% - 20px, 1180px);
+        width: calc(100% - 20px);
+      }
+
+      .header-inner {
+        flex-wrap: wrap;
+        padding: 12px 0;
+        gap: 10px;
       }
 
       .nav {
         order: 3;
-        width: 100%;
-        justify-content: center;
-      }
-
-      .products-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .product-image {
-        height: 240px;
+        flex-basis: 100%;
       }
 
       .header-actions {
         margin-left: auto;
       }
 
-      .hero-content h1 {
-        font-size: 38px;
+      .header-actions .primary {
+        display: none;
       }
 
-      .offer-item,
-      .chat-item,
-      .history-item,
-      .wishlist-item {
-        align-items: flex-start;
+      .auth-buttons .secondary {
+        display: none;
+      }
+
+      .user-chip {
+        max-width: 120px;
+      }
+
+      .hero-main {
+        min-height: 330px;
+        padding: 28px;
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .products {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .visual {
+        height: 175px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .section-heading {
+        display: block;
+      }
+
+      .section-heading .secondary {
+        margin-top: 12px;
+      }
+
+      .profile-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 440px) {
+      .products {
+        grid-template-columns: 1fr;
+      }
+
+      .visual {
+        height: 220px;
+      }
+
+      .profile-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .color-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .chat-form {
         flex-direction: column;
+      }
+
+      .auth-buttons .primary {
+        padding: 10px 12px;
       }
     }
   </style>
 </head>
 
 <body>
-  <header class="header">
-    <div class="container header-inner">
-      <a href="#" class="logo" onclick="showPage('home'); return false;">
-        TRADE
-      </a>
 
-      <nav class="nav">
-        <button onclick="showPage('home')">Главная</button>
-        <button onclick="showPage('catalog')">Каталог</button>
-        <button onclick="showPage('favorites')">Избранное</button>
-        <button onclick="showPage('offers')">Обмены</button>
-        <button onclick="showPage('chat')">Чат</button>
-        <button onclick="showPage('profile')">Профиль</button>
-      </nav>
+<header class="header">
+  <div class="container header-inner">
 
-      <div class="header-actions">
-        <button class="icon-button" onclick="toggleTheme()" title="Сменить тему">
-          🌓
-        </button>
+    <a class="logo" href="#" onclick="goHome(event)">
+      TRADE<span>.</span>
+    </a>
 
-        <button
-          class="button secondary small"
-          id="auth-button"
-          onclick="handleAuthButton()"
-        >
-          Войти
-        </button>
-      </div>
-    </div>
-  </header>
+    <nav class="nav">
+      <button class="active" data-nav="home" onclick="goHome()">
+        Главная
+      </button>
 
-  <main class="main">
-    <div class="container">
+      <button data-nav="catalog" onclick="goCatalog()">
+        Объявления
+      </button>
 
-      <!-- Главная -->
-      <section id="page-home" class="page">
-        <div class="hero">
-          <div class="hero-content">
-            <h1>Обменивайся вещами легко</h1>
-            <p>
-              Найди то, что тебе нужно, и предложи обмен.
-              Никаких лишних покупок — только полезные вещи и честные обмены.
-            </p>
-            <div>
-              <button class="button" onclick="showPage('catalog')">
-                Смотреть каталог
-              </button>
-              <button class="button secondary" onclick="openAddModal()">
-                Добавить вещь
-              </button>
-            </div>
-          </div>
+      <button data-nav="favorites" onclick="openFavorites()">
+        Избранное <span id="fav-count"></span>
+      </button>
 
-          <div class="hero-image"></div>
-        </div>
+      <button data-nav="offers" onclick="openOffers()">
+        Обмены <span id="offer-count"></span>
+      </button>
 
-        <div class="section-header">
-          <h2>Новые объявления</h2>
-          <button class="button secondary small" onclick="showPage('catalog')">
-            Весь каталог
-          </button>
-        </div>
+      <button data-nav="history" onclick="openHistory()">
+        История
+      </button>
 
-        <div id="home-products" class="products-grid"></div>
-      </section>
+      <button data-nav="wishes" onclick="openWishes()">
+        Хочу найти
+      </button>
 
-      <!-- Каталог -->
-      <section id="page-catalog" class="page hidden">
-        <div class="section-header">
-          <h2>Каталог вещей</h2>
-          <button class="button" onclick="openAddModal()">
-            + Добавить объявление
-          </button>
-        </div>
+      <button data-nav="profile" onclick="openProfile()">
+        Профиль
+      </button>
+    </nav>
 
-        <div class="filters">
-          <input
-            class="input"
-            id="search-input"
-            type="search"
-            placeholder="Поиск по названию или описанию..."
-            oninput="renderProducts()"
-          />
+    <div class="header-actions">
 
-          <select
-            class="select"
-            id="sort-select"
-            onchange="renderProducts()"
-          >
-            <option value="new">Сначала новые</option>
-            <option value="old">Сначала старые</option>
-            <option value="name">По названию</option>
-          </select>
+      <button class="icon-btn" onclick="openNotifications()" title="Уведомления">
+        🔔<span id="notification-count"></span>
+      </button>
 
-          <select
-            class="select"
-            id="status-filter"
-            onchange="renderProducts()"
-          >
-            <option value="all">Все статусы</option>
-            <option value="available">Доступны</option>
-            <option value="pending">В процессе обмена</option>
-            <option value="traded">Обменены</option>
-          </select>
-        </div>
+      <button class="icon-btn" onclick="openColorModal()" title="Изменить цвет">
+        🎨
+      </button>
 
-        <div id="categories" class="categories"></div>
-        <div id="catalog-products" class="products-grid"></div>
-      </section>
+      <button class="icon-btn" onclick="toggleTheme()" title="Сменить тему">
+        ☼
+      </button>
 
-      <!-- Избранное -->
-      <section id="page-favorites" class="page hidden">
-        <div class="section-header">
-          <h2>Избранное</h2>
-        </div>
+      <button class="primary" onclick="openAddModal()">
+        ＋ Добавить
+      </button>
 
-        <div id="favorite-products" class="products-grid"></div>
-      </section>
-
-      <!-- Предложения -->
-      <section id="page-offers" class="page hidden">
-        <div class="section-header">
-          <h2>Предложения обмена</h2>
-        </div>
-
-        <div class="card">
-          <div id="offers-list" class="offer-list"></div>
-        </div>
-      </section>
-
-      <!-- Чат -->
-      <section id="page-chat" class="page hidden">
-        <div class="section-header">
-          <h2>Чат</h2>
-        </div>
-
-        <div class="card">
-          <div id="chat-list" class="chat-list"></div>
-        </div>
-      </section>
-
-      <!-- Профиль -->
-      <section id="page-profile" class="page hidden">
-        <div class="section-header">
-          <h2>Мой профиль</h2>
-        </div>
-
-        <div class="profile-layout">
-          <aside class="card profile-card">
-            <div id="profile-avatar" class="avatar">?</div>
-            <h2 id="profile-name-view">Гость</h2>
-            <p id="profile-city-view">Город не указан</p>
-            <p id="profile-about-view">Описание отсутствует</p>
-
-            <div class="profile-menu">
-              <button class="active" onclick="showProfileTab('settings', this)">
-                ⚙️ Настройки профиля
-              </button>
-              <button onclick="showProfileTab('my-products', this)">
-                📦 Мои объявления
-              </button>
-              <button onclick="showProfileTab('history', this)">
-                🔄 История обменов
-              </button>
-              <button onclick="showProfileTab('wishlist', this)">
-                💭 Список желаний
-              </button>
-            </div>
-          </aside>
-
-          <div>
-            <div id="profile-tab-settings" class="profile-tab card">
-              <h2>Настройки профиля</h2>
-              <p style="color: var(--muted);">
-                Заполни информацию, чтобы другим пользователям было проще
-                узнать тебя.
-              </p>
-
-              <div class="form-grid">
-                <div class="form-group">
-                  <label for="profile-name">Имя</label>
-                  <input class="input" id="profile-name" />
-                </div>
-
-                <div class="form-group">
-                  <label for="profile-city">Город</label>
-                  <input class="input" id="profile-city" />
-                </div>
-
-                <div class="form-group full">
-                  <label for="profile-avatar-url">URL аватара</label>
-                  <input
-                    class="input"
-                    id="profile-avatar-url"
-                    placeholder="https://..."
-                  />
-                </div>
-
-                <div class="form-group full">
-                  <label for="profile-about">О себе</label>
-                  <textarea
-                    class="textarea"
-                    id="profile-about"
-                    placeholder="Напиши немного о себе..."
-                  ></textarea>
-                </div>
-              </div>
-
-              <button class="button" onclick="saveProfile()">
-                Сохранить профиль
-              </button>
-            </div>
-
-            <div id="profile-tab-my-products" class="profile-tab card hidden">
-              <h2>Мои объявления</h2>
-              <div id="my-products" class="products-grid"></div>
-            </div>
-
-            <div id="profile-tab-history" class="profile-tab card hidden">
-              <h2>История обменов</h2>
-              <div id="history-list" class="history-list"></div>
-            </div>
-
-            <div id="profile-tab-wishlist" class="profile-tab card hidden">
-              <h2>Список желаний</h2>
-
-              <div style="display: flex; gap: 10px; margin-bottom: 18px;">
-                <input
-                  class="input"
-                  id="wishlist-input"
-                  placeholder="Например: настольная игра"
-                />
-                <button class="button" onclick="addWishlistItem()">
-                  Добавить
-                </button>
-              </div>
-
-              <div id="wishlist-list" class="wishlist-list"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </div>
-  </main>
-
-  <footer class="footer">
-    <div class="container">
-      TRADE © 2026 — Платформа для обмена вещами
-    </div>
-  </footer>
-
-  <!-- Модальное окно авторизации -->
-  <div id="auth-modal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'auth-modal')">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 id="auth-title">Вход</h2>
-        <button class="close-button" onclick="closeModal('auth-modal')">×</button>
-      </div>
-
-      <div class="auth-tabs">
-        <button
-          id="login-tab"
-          class="auth-tab active"
-          onclick="setAuthMode('login')"
-        >
+      <div id="guest-auth-buttons" class="auth-buttons">
+        <button class="secondary" onclick="openAuthModal('login')">
           Войти
         </button>
 
-        <button
-          id="register-tab"
-          class="auth-tab"
-          onclick="setAuthMode('register')"
-        >
+        <button class="primary" onclick="openAuthModal('register')">
           Регистрация
         </button>
       </div>
 
-      <div id="auth-error" class="error-message"></div>
+      <div id="account-wrapper" class="account-wrapper hidden">
+        <button class="user-chip" onclick="toggleAccountMenu()">
+          <img id="header-avatar" class="user-chip-avatar" alt="Аватар">
+          <span id="header-user-name" class="user-chip-name"></span>
+        </button>
 
+        <div id="account-menu" class="account-menu">
+          <button onclick="openProfile();closeAccountMenu()">
+            👤 Мой профиль
+          </button>
+
+          <button onclick="openProfileEditFromMenu();closeAccountMenu()">
+            ✏️ Редактировать профиль
+          </button>
+
+          <button onclick="logout()">
+            🚪 Выйти
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <section id="home">
+    <div class="hero">
+
+      <div class="hero-main">
+        <h1>Обменивай.<br>Не покупай.</h1>
+
+        <p>
+          TRADE помогает находить новым владельцам вещи,
+          которыми вы больше не пользуетесь. Публикуйте объявления,
+          сохраняйте интересное и договаривайтесь об обмене.
+        </p>
+
+        <button class="primary" onclick="goCatalog()">
+          Смотреть объявления →
+        </button>
+      </div>
+
+      <div class="stats-card">
+        <div class="stat">
+          <strong id="stat-products">0</strong>
+          <span>активных<br>объявлений</span>
+        </div>
+
+        <div class="stat">
+          <strong id="stat-users">12</strong>
+          <span>участников<br>демо-сервиса</span>
+        </div>
+
+        <div class="stat">
+          <strong id="stat-rating">4.9</strong>
+          <span>средний<br>рейтинг</span>
+        </div>
+      </div>
+
+    </div>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>Как это работает</h2>
+          <p class="sub">Всё необходимое — в одном месте.</p>
+        </div>
+      </div>
+
+      <div class="features">
+        <div class="feature">
+          <div class="emoji">📦</div>
+          <h3>Разместите вещь</h3>
+          <p>
+            Добавьте фото, описание, состояние и напишите,
+            что хотели бы получить взамен.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="emoji">🔎</div>
+          <h3>Найдите нужное</h3>
+          <p>
+            Ищите товары по названию, категории,
+            описанию, городу и статусу.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="emoji">🤝</div>
+          <h3>Договоритесь</h3>
+          <p>
+            Отправьте предложение, начните чат,
+            примите обмен и оставьте отзыв.
+          </p>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <section class="section" id="catalog">
+    <div class="section-heading">
+      <div>
+        <h2>Объявления</h2>
+        <p class="sub">
+          Выберите вещь и предложите свой вариант обмена.
+        </p>
+      </div>
+
+      <button class="secondary" onclick="openAddModal()">
+        ＋ Разместить вещь
+      </button>
+    </div>
+
+    <div class="toolbar">
+      <input
+        id="search"
+        class="input"
+        placeholder="Поиск по объявлениям..."
+        oninput="renderProducts()"
+      >
+
+      <select id="sort" class="select" onchange="renderProducts()">
+        <option value="new">Сначала новые</option>
+        <option value="old">Сначала старые</option>
+        <option value="title">По названию</option>
+      </select>
+
+      <select id="status-filter" class="select" onchange="renderProducts()">
+        <option value="all">Все статусы</option>
+        <option value="available">Доступно</option>
+        <option value="offers">Есть предложения</option>
+        <option value="completed">Обмен завершён</option>
+      </select>
+
+      <button class="secondary" onclick="resetFilters()">
+        Сбросить
+      </button>
+    </div>
+
+    <div class="categories" id="categories"></div>
+    <div class="products" id="products"></div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div>
+      <strong>TRADE.</strong> Обмен вещами между людьми.
+    </div>
+
+    <div>
+      Демо-прототип · Данные сохраняются в вашем браузере
+    </div>
+  </div>
+</footer>
+
+<!-- Авторизация -->
+<div class="modal-bg" id="auth-modal">
+  <div class="modal">
+    <button class="close" onclick="closeModal('auth-modal')">×</button>
+
+    <h2 id="auth-title">Вход</h2>
+
+    <p class="sub" id="auth-subtitle">
+      Войдите, чтобы пользоваться всеми возможностями TRADE.
+    </p>
+
+    <div class="auth-tabs">
+      <button id="login-tab" class="auth-tab active" onclick="switchAuthMode('login')">
+        Вход
+      </button>
+
+      <button id="register-tab" class="auth-tab" onclick="switchAuthMode('register')">
+        Регистрация
+      </button>
+    </div>
+
+    <div id="auth-error" class="auth-error"></div>
+
+    <form onsubmit="submitAuth(event)">
       <div id="register-name-group" class="form-group hidden">
-        <label for="auth-name">Имя</label>
+        <label>Имя пользователя</label>
         <input
-          class="input"
           id="auth-name"
-          placeholder="Твоё имя"
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="auth-email">Email</label>
-        <input
           class="input"
-          id="auth-email"
-          type="email"
-          placeholder="example@mail.com"
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="auth-password">Пароль</label>
-        <input
-          class="input"
-          id="auth-password"
-          type="password"
-          placeholder="Минимум 6 символов"
-        />
-      </div>
-
-      <div id="register-repeat-group" class="form-group hidden">
-        <label for="auth-password-repeat">Повтори пароль</label>
-        <input
-          class="input"
-          id="auth-password-repeat"
-          type="password"
-          placeholder="Повтори пароль"
-        />
-      </div>
-
-      <div class="modal-actions">
-        <button
-          class="button secondary"
-          onclick="closeModal('auth-modal')"
+          placeholder="Например: Алексей"
         >
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input
+          id="auth-email"
+          class="input"
+          type="email"
+          required
+          placeholder="you@example.com"
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Пароль</label>
+        <input
+          id="auth-password"
+          class="input"
+          type="password"
+          required
+          minlength="4"
+          placeholder="Минимум 4 символа"
+        >
+      </div>
+
+      <div id="register-password-group" class="form-group hidden">
+        <label>Повторите пароль</label>
+        <input
+          id="auth-password-confirm"
+          class="input"
+          type="password"
+          minlength="4"
+          placeholder="Повторите пароль"
+        >
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="secondary" onclick="closeModal('auth-modal')">
           Отмена
         </button>
 
-        <button
-          id="auth-submit-button"
-          class="button"
-          onclick="submitAuth()"
-        >
+        <button id="auth-submit" class="primary" type="submit">
           Войти
         </button>
       </div>
-    </div>
+    </form>
   </div>
+</div>
 
-  <!-- Модальное окно добавления товара -->
-  <div id="product-modal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'product-modal')">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 id="product-modal-title">Добавить объявление</h2>
-        <button class="close-button" onclick="closeModal('product-modal')">
-          ×
-        </button>
-      </div>
+<!-- Просмотр товара -->
+<div class="modal-bg" id="product-modal">
+  <div class="modal wide">
+    <button class="close" onclick="closeModal('product-modal')">×</button>
+    <div id="product-detail"></div>
+  </div>
+</div>
+
+<!-- Добавление и редактирование товара -->
+<div class="modal-bg" id="add-modal">
+  <div class="modal">
+    <button class="close" onclick="closeModal('add-modal')">×</button>
+
+    <h2 id="add-modal-title">Новое объявление</h2>
+
+    <form onsubmit="saveProduct(event)">
+      <input type="hidden" id="edit-id">
 
       <div class="form-group">
-        <label for="product-title">Название</label>
+        <label>Название</label>
         <input
           class="input"
-          id="product-title"
-          placeholder="Например: Настольная игра"
-        />
+          id="add-title"
+          required
+          placeholder="Например: настольная лампа"
+        >
       </div>
 
       <div class="form-group">
-        <label for="product-description">Описание</label>
-        <textarea
-          class="textarea"
-          id="product-description"
-          placeholder="Опиши вещь..."
-        ></textarea>
-      </div>
-
-      <div class="form-grid">
-        <div class="form-group">
-          <label for="product-category">Категория</label>
-          <select class="select" id="product-category">
-            <option value="Электроника">Электроника</option>
-            <option value="Одежда">Одежда</option>
-            <option value="Книги">Книги</option>
-            <option value="Дом">Дом</option>
-            <option value="Спорт">Спорт</option>
-            <option value="Игры">Игры</option>
-            <option value="Другое">Другое</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="product-condition">Состояние</label>
-          <select class="select" id="product-condition">
-            <option value="Новое">Новое</option>
-            <option value="Как новое">Как новое</option>
-            <option value="Хорошее">Хорошее</option>
-            <option value="Есть следы использования">
-              Есть следы использования
-            </option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="product-city">Город</label>
-        <input
-          class="input"
-          id="product-city"
-          placeholder="Например: Москва"
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="product-image">URL изображения</label>
-        <input
-          class="input"
-          id="product-image"
-          placeholder="https://..."
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="product-status">Статус</label>
-        <select class="select" id="product-status">
-          <option value="available">Доступно для обмена</option>
-          <option value="pending">В процессе обмена</option>
-          <option value="traded">Обменено</option>
+        <label>Категория</label>
+        <select class="select" id="add-category">
+          <option>Электроника</option>
+          <option>Дом</option>
+          <option>Одежда</option>
+          <option>Книги</option>
+          <option>Спорт</option>
+          <option>Хобби</option>
+          <option>Другое</option>
         </select>
       </div>
 
-      <div class="modal-actions">
-        <button
-          class="button secondary"
-          onclick="closeModal('product-modal')"
-        >
-          Отмена
-        </button>
-
-        <button class="button" onclick="saveProduct()">
-          Сохранить
-        </button>
+      <div class="form-group">
+        <label>Состояние</label>
+        <select class="select" id="add-condition">
+          <option>Новое</option>
+          <option>Как новое</option>
+          <option>Хорошее</option>
+          <option>Есть следы использования</option>
+          <option>Требует ремонта</option>
+        </select>
       </div>
-    </div>
-  </div>
-
-  <!-- Модальное окно предложения обмена -->
-  <div id="offer-modal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'offer-modal')">
-    <div class="modal">
-      <div class="modal-header">
-        <h2>Предложить обмен</h2>
-        <button class="close-button" onclick="closeModal('offer-modal')">
-          ×
-        </button>
-      </div>
-
-      <p id="offer-product-name" style="color: var(--muted);"></p>
 
       <div class="form-group">
-        <label for="offer-message">Сообщение владельцу</label>
+        <label>Статус</label>
+        <select class="select" id="add-status">
+          <option value="available">Доступно</option>
+          <option value="offers">Есть предложения</option>
+          <option value="completed">Обмен завершён</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Описание</label>
         <textarea
           class="textarea"
-          id="offer-message"
-          placeholder="Что ты предлагаешь взамен?"
+          id="add-description"
+          required
+          placeholder="Состояние, размер, особенности..."
         ></textarea>
       </div>
 
-      <div class="modal-actions">
+      <div class="form-group">
+        <label>Что хотите получить взамен?</label>
+        <input
+          class="input"
+          id="add-wanted"
+          required
+          placeholder="Например: книги или предложите вариант"
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Город или район</label>
+        <input
+          class="input"
+          id="add-location"
+          placeholder="Не указан"
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Ссылка на фото</label>
+        <input
+          class="input"
+          id="add-image"
+          type="url"
+          placeholder="https://..."
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Или загрузите фото с устройства</label>
+        <input
+          class="input"
+          id="add-file"
+          type="file"
+          accept="image/*"
+          onchange="previewLocalImage(event)"
+        >
+      </div>
+
+      <div id="image-preview" class="hidden"></div>
+
+      <div class="form-actions">
         <button
-          class="button secondary"
-          onclick="closeModal('offer-modal')"
+          type="button"
+          class="secondary"
+          onclick="closeModal('add-modal')"
         >
           Отмена
         </button>
 
-        <button class="button" onclick="submitOffer()">
-          Отправить предложение
+        <button class="primary" type="submit">
+          Сохранить объявление
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Профиль -->
+<div class="modal-bg" id="profile-modal">
+  <div class="modal wide">
+    <button class="close" onclick="closeModal('profile-modal')">×</button>
+
+    <h2>Мой профиль</h2>
+
+    <div class="profile-head">
+      <img id="profile-avatar" class="avatar" alt="Аватар">
+
+      <div>
+        <h3 id="profile-name"></h3>
+        <p id="profile-city"></p>
+        <p id="profile-about"></p>
+        <div id="profile-rating-view"></div>
+      </div>
+    </div>
+
+    <div class="profile-stats">
+      <div class="profile-stat">
+        <strong id="my-products">0</strong>
+        <span>объявлений</span>
+      </div>
+
+      <div class="profile-stat">
+        <strong id="my-rating">0</strong>
+        <span>рейтинг</span>
+      </div>
+
+      <div class="profile-stat">
+        <strong id="my-reviews">0</strong>
+        <span>отзывов</span>
+      </div>
+
+      <div class="profile-stat">
+        <strong id="my-completed">0</strong>
+        <span>обменов</span>
+      </div>
+    </div>
+
+    <div class="notice">
+      Профиль, объявления, отзывы и предложения сохраняются
+      только в этом браузере. Это демонстрационная версия
+      без общего сервера.
+    </div>
+
+    <div class="form-actions">
+      <button class="secondary" onclick="openProfileEdit()">
+        Редактировать
+      </button>
+
+      <button class="secondary" onclick="showMyProducts()">
+        Мои объявления
+      </button>
+
+      <button class="primary" onclick="openReviews()">
+        Мои отзывы
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Редактирование профиля -->
+<div class="modal-bg" id="profile-edit-modal">
+  <div class="modal">
+    <button class="close" onclick="closeModal('profile-edit-modal')">×</button>
+
+    <h2>Редактировать профиль</h2>
+
+    <form onsubmit="saveProfile(event)">
+      <div class="form-group">
+        <label>Имя</label>
+        <input class="input" id="p-name" required>
+      </div>
+
+      <div class="form-group">
+        <label>Город</label>
+        <input class="input" id="p-city" placeholder="Не указан">
+      </div>
+
+      <div class="form-group">
+        <label>О себе</label>
+        <textarea class="textarea" id="p-about"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Ссылка на аватар</label>
+        <input class="input" id="p-avatar" type="url" placeholder="https://...">
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="button"
+          class="secondary"
+          onclick="closeModal('profile-edit-modal')"
+        >
+          Отмена
+        </button>
+
+        <button class="primary">
+          Сохранить
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Избранное -->
+<div class="modal-bg" id="favorites-modal">
+  <div class="modal wide">
+    <button class="close" onclick="closeModal('favorites-modal')">×</button>
+    <h2>Избранное</h2>
+    <div class="products" id="favorites-products"></div>
+  </div>
+</div>
+
+<!-- Предложения -->
+<div class="modal-bg" id="offers-modal">
+  <div class="modal wide">
+    <button class="close" onclick="closeModal('offers-modal')">×</button>
+    <h2>Мои предложения</h2>
+    <div class="list" id="offers-list"></div>
+  </div>
+</div>
+
+<!-- История -->
+<div class="modal-bg" id="history-modal">
+  <div class="modal wide">
+    <button class="close" onclick="closeModal('history-modal')">×</button>
+    <h2>История обменов</h2>
+    <div class="list" id="history-list"></div>
+  </div>
+</div>
+
+<!-- Список желаний -->
+<div class="modal-bg" id="wishes-modal">
+  <div class="modal wide">
+    <button class="close" onclick="closeModal('wishes-modal')">×</button>
+
+    <h2>Хочу найти</h2>
+
+    <form onsubmit="addWish(event)">
+      <div class="form-group">
+        <label>Что вы ищете?</label>
+        <input
+          class="input"
+          id="wish-input"
+          required
+          placeholder="Например: игровую приставку или велосипед"
+        >
+      </div>
+
+      <div class="form-actions">
+        <button class="primary">
+          Добавить желание
+        </button>
+      </div>
+    </form>
+
+    <div class="list" id="wishes-list"></div>
+  </div>
+</div>
+
+<!-- Уведомления -->
+<div class="modal-bg" id="notifications-modal">
+  <div class="modal">
+    <button class="close" onclick="closeModal('notifications-modal')">×</button>
+    <h2>Уведомления</h2>
+    <div id="notifications-list"></div>
+
+    <div class="form-actions">
+      <button class="secondary" onclick="markNotificationsRead()">
+        Отметить всё прочитанным
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Чат -->
+<div class="modal-bg" id="chat-modal">
+  <div class="modal">
+    <button class="close" onclick="closeModal('chat-modal')">×</button>
+
+    <h2 id="chat-title">Чат</h2>
+
+    <div class="chat" id="chat-list"></div>
+
+    <form class="chat-form" onsubmit="sendMessage(event)">
+      <input
+        class="input"
+        id="chat-input"
+        required
+        placeholder="Напишите сообщение..."
+      >
+
+      <button class="primary">
+        Отправить
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Профиль другого пользователя -->
+<div class="modal-bg" id="public-profile-modal">
+  <div class="modal wide">
+    <button class="close" onclick="closeModal('public-profile-modal')">×</button>
+    <div id="public-profile-content"></div>
+  </div>
+</div>
+
+<!-- Отзывы -->
+<div class="modal-bg" id="reviews-modal">
+  <div class="modal wide">
+    <button class="close" onclick="closeModal('reviews-modal')">×</button>
+    <h2 id="reviews-title">Отзывы</h2>
+    <div class="list" id="reviews-list"></div>
+  </div>
+</div>
+
+<!-- Добавление отзыва -->
+<div class="modal-bg" id="review-add-modal">
+  <div class="modal">
+    <button class="close" onclick="closeModal('review-add-modal')">×</button>
+
+    <h2>Оставить отзыв</h2>
+
+    <form onsubmit="saveReview(event)">
+      <input type="hidden" id="review-user">
+
+      <div class="form-group">
+        <label>Оценка</label>
+        <select class="select" id="review-rating">
+          <option value="5">★★★★★ — Отлично</option>
+          <option value="4">★★★★☆ — Хорошо</option>
+          <option value="3">★★★☆☆ — Нормально</option>
+          <option value="2">★★☆☆☆ — Плохо</option>
+          <option value="1">★☆☆☆☆ — Очень плохо</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Комментарий</label>
+        <textarea
+          class="textarea"
+          id="review-text"
+          required
+          placeholder="Расскажите, как прошёл обмен..."
+        ></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button class="primary">
+          Опубликовать отзыв
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Выбор цвета -->
+<div class="modal-bg" id="color-modal">
+  <div class="modal">
+    <button class="close" onclick="closeModal('color-modal')">×</button>
+
+    <h2>Цвет интерфейса</h2>
+
+    <p class="sub">
+      Выберите цвет кнопок, меток и акцентов сайта.
+    </p>
+
+    <div class="color-grid">
+      <button class="color-choice" style="background:#ff7a00"
+        onclick="applyAccent('#ff7a00')">
+        Оранжевый
+      </button>
+
+      <button class="color-choice" style="background:#2878ff"
+        onclick="applyAccent('#2878ff')">
+        Синий
+      </button>
+
+      <button class="color-choice" style="background:#18a957"
+        onclick="applyAccent('#18a957')">
+        Зелёный
+      </button>
+
+      <button class="color-choice" style="background:#8b5cf6"
+        onclick="applyAccent('#8b5cf6')">
+        Фиолетовый
+      </button>
+
+      <button class="color-choice" style="background:#ec4899"
+        onclick="applyAccent('#ec4899')">
+        Розовый
+      </button>
+
+      <button class="color-choice" style="background:#eab308"
+        onclick="applyAccent('#eab308')">
+        Жёлтый
+      </button>
+    </div>
+
+    <div class="form-group">
+      <label>Свой цвет</label>
+
+      <div style="display:flex;gap:10px;align-items:center">
+        <input
+          id="custom-color"
+          type="color"
+          value="#ff7a00"
+          style="width:64px;height:46px"
+        >
+
+        <button
+          type="button"
+          class="primary"
+          onclick="applyCustomAccent()"
+        >
+          Применить
         </button>
       </div>
     </div>
   </div>
+</div>
 
-  <div id="toast" class="toast"></div>
+<div class="toast" id="toast"></div>
 
-  <script>
-    /*
-      ==========================
-      Работа с localStorage
-      ==========================
-    */
+<script>
+  const FALLBACK_IMAGE =
+    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900&auto=format&fit=crop";
 
-    function loadData(key, fallback) {
-      try {
-        const value = localStorage.getItem(key);
-        return value ? JSON.parse(value) : fallback;
-      } catch (error) {
-        return fallback;
+  const DEFAULT_AVATAR =
+    "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop";
+
+  const seedProducts = [
+    {
+      id: 1,
+      title: "Беспроводные наушники",
+      category: "Электроника",
+      condition: "Хорошее",
+      status: "available",
+      description: "Рабочие Bluetooth-наушники. Хорошее состояние, кабель в комплекте.",
+      wanted: "Книги, лампа или другой вариант",
+      location: "Не указан",
+      user: "Алексей",
+      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900&auto=format&fit=crop",
+      createdAt: 6
+    },
+    {
+      id: 2,
+      title: "Кофейный набор",
+      category: "Дом",
+      condition: "Как новое",
+      status: "offers",
+      description: "Набор чашек для кофе. Почти не использовался.",
+      wanted: "Растения или декор",
+      location: "Не указан",
+      user: "Марина",
+      image: "https://images.unsplash.com/photo-1514228742587-6b1558fcf93a?w=900&auto=format&fit=crop",
+      createdAt: 5
+    },
+    {
+      id: 3,
+      title: "Кроссовки для бега",
+      category: "Спорт",
+      condition: "Есть следы использования",
+      status: "available",
+      description: "Лёгкие кроссовки, размер 42. Есть следы использования.",
+      wanted: "Спортивная сумка или аксессуары",
+      location: "Не указан",
+      user: "Дмитрий",
+      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&auto=format&fit=crop",
+      createdAt: 4
+    },
+    {
+      id: 4,
+      title: "Городской рюкзак",
+      category: "Одежда",
+      condition: "Хорошее",
+      status: "available",
+      description: "Вместительный рюкзак для города и ноутбука.",
+      wanted: "Настольные игры или книги",
+      location: "Не указан",
+      user: "Ольга",
+      image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=900&auto=format&fit=crop",
+      createdAt: 3
+    },
+    {
+      id: 5,
+      title: "Книги по дизайну",
+      category: "Книги",
+      condition: "Хорошее",
+      status: "completed",
+      description: "Несколько книг по графическому и веб-дизайну.",
+      wanted: "Книги по бизнесу или психологии",
+      location: "Не указан",
+      user: "Ирина",
+      image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=900&auto=format&fit=crop",
+      createdAt: 2
+    },
+    {
+      id: 6,
+      title: "Настольная лампа",
+      category: "Дом",
+      condition: "Как новое",
+      status: "available",
+      description: "Минималистичная лампа для рабочего стола.",
+      wanted: "Комнатное растение или ваш вариант",
+      location: "Не указан",
+      user: "Сергей",
+      image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=900&auto=format&fit=crop",
+      createdAt: 1
+    }
+  ];
+
+  let authMode = "login";
+  let currentUser = loadData("trade_current_user", null);
+
+  let users = loadData("trade_users", []);
+
+  let products = loadData("trade_products", seedProducts);
+  let favorites = loadData("trade_favorites", []);
+  let offers = loadData("trade_offers", []);
+  let messages = loadData("trade_messages", []);
+  let history = loadData("trade_history", []);
+  let wishes = loadData("trade_wishes", []);
+  let notifications = loadData("trade_notifications", []);
+  let reviews = loadData("trade_reviews", []);
+
+  let profile = loadData("trade_profile", {
+    name: "Ваше имя",
+    city: "Город не указан",
+    about: "Пока ничего не рассказано о себе.",
+    avatar: DEFAULT_AVATAR
+  });
+
+  let selectedCategory = "Все";
+  let currentProductId = null;
+  let localImage = "";
+
+  function loadData(key, fallback) {
+    try {
+      const value = localStorage.getItem(key);
+      return value ? JSON.parse(value) : fallback;
+    } catch (error) {
+      return fallback;
+    }
+  }
+
+  function saveData(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function showToast(text) {
+    const toast = document.getElementById("toast");
+    toast.textContent = text;
+    toast.classList.add("show");
+
+    setTimeout(() => {
+      toast.classList.remove("show");
+    }, 2600);
+  }
+
+  function openModal(id) {
+    const modal = document.getElementById(id);
+
+    if (modal) {
+      modal.classList.add("open");
+    }
+  }
+
+  function closeModal(id) {
+    const modal = document.getElementById(id);
+
+    if (modal) {
+      modal.classList.remove("open");
+    }
+  }
+
+  document.querySelectorAll(".modal-bg").forEach(modal => {
+    modal.addEventListener("click", event => {
+      if (event.target === modal) {
+        modal.classList.remove("open");
       }
-    }
-
-    function saveData(key, value) {
-      localStorage.setItem(key, JSON.stringify(value));
-    }
-
-    /*
-      ==========================
-      Начальные данные
-      ==========================
-    */
-
-    let products = loadData("trade_products", []);
-    let favorites = loadData("trade_favorites", []);
-    let offers = loadData("trade_offers", []);
-    let chats = loadData("trade_chats", []);
-    let history = loadData("trade_history", []);
-    let wishlist = loadData("trade_wishlist", []);
-
-    let profile = loadData("trade_profile", {
-      name: "",
-      city: "",
-      about: "",
-      avatar: ""
     });
+  });
 
-    let accounts = loadData("trade_accounts", []);
-    let currentAccount = loadData("trade_current_account", null);
+  function isLoggedIn() {
+    return Boolean(currentUser);
+  }
 
-    let selectedCategory = "all";
-    let editingProductId = null;
-    let selectedOfferProductId = null;
-    let authMode = "login";
-
-    /*
-      Демонстрационные товары
-    */
-
-    if (products.length === 0) {
-      products = [
-        {
-          id: createId(),
-          title: "Настольная игра",
-          description: "Интересная игра для компании. Состояние отличное.",
-          category: "Игры",
-          condition: "Как новое",
-          city: "Москва",
-          image: "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=800&q=80",
-          status: "available",
-          owner: "Демо-пользователь",
-          ownerId: "demo",
-          createdAt: Date.now() - 1000
-        },
-        {
-          id: createId(),
-          title: "Наушники",
-          description: "Беспроводные наушники, работают исправно.",
-          category: "Электроника",
-          condition: "Хорошее",
-          city: "Санкт-Петербург",
-          image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80",
-          status: "available",
-          owner: "Демо-пользователь",
-          ownerId: "demo",
-          createdAt: Date.now() - 2000
-        },
-        {
-          id: createId(),
-          title: "Книга",
-          description: "Роман в хорошем состоянии.",
-          category: "Книги",
-          condition: "Хорошее",
-          city: "Казань",
-          image: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&w=800&q=80",
-          status: "available",
-          owner: "Демо-пользователь",
-          ownerId: "demo",
-          createdAt: Date.now() - 3000
-        },
-        {
-          id: createId(),
-          title: "Рюкзак",
-          description: "Удобный городской рюкзак.",
-          category: "Одежда",
-          condition: "Хорошее",
-          city: "Екатеринбург",
-          image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80",
-          status: "available",
-          owner: "Демо-пользователь",
-          ownerId: "demo",
-          createdAt: Date.now() - 4000
-        }
-      ];
-
-      saveData("trade_products", products);
-    }
-
-    /*
-      ==========================
-      Общие функции
-      ==========================
-    */
-
-    function createId() {
-      return Date.now().toString(36) + Math.random().toString(36).slice(2);
-    }
-
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    function showToast(message) {
-      const toast = document.getElementById("toast");
-
-      toast.textContent = message;
-      toast.classList.add("show");
-
-      clearTimeout(window.toastTimer);
-
-      window.toastTimer = setTimeout(() => {
-        toast.classList.remove("show");
-      }, 2800);
-    }
-
-    function openModal(id) {
-      document.getElementById(id).classList.add("open");
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).classList.remove("open");
-    }
-
-    function closeModalOnOverlay(event, id) {
-      if (event.target.id === id) {
-        closeModal(id);
-      }
-    }
-
-    function showPage(pageName) {
-      document.querySelectorAll(".page").forEach(page => {
-        page.classList.add("hidden");
-      });
-
-      const page = document.getElementById("page-" + pageName);
-
-      if (page) {
-        page.classList.remove("hidden");
-      }
-
-      if (pageName === "home") {
-        renderHomeProducts();
-      }
-
-      if (pageName === "catalog") {
-        renderProducts();
-      }
-
-      if (pageName === "favorites") {
-        renderFavorites();
-      }
-
-      if (pageName === "offers") {
-        renderOffers();
-      }
-
-      if (pageName === "chat") {
-        renderChats();
-      }
-
-      if (pageName === "profile") {
-        updateProfileView();
-        renderMyProducts();
-        renderHistory();
-        renderWishlist();
-      }
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-    }
-
-    function toggleTheme() {
-      document.body.classList.toggle("dark");
-
-      saveData(
-        "trade_theme",
-        document.body.classList.contains("dark") ? "dark" : "light"
-      );
-    }
-
-    function initTheme() {
-      const theme = loadData("trade_theme", "light");
-
-      if (theme === "dark") {
-        document.body.classList.add("dark");
-      }
-    }
-
-    /*
-      ==========================
-      Авторизация
-      ==========================
-    */
-
-    function handleAuthButton() {
-      if (currentAccount) {
-        const action = confirm(
-          "Вы вошли как " +
-          currentAccount.name +
-          ".\n\nНажмите «ОК», чтобы открыть профиль.\nНажмите «Отмена», чтобы выйти."
-        );
-
-        if (action) {
-          showPage("profile");
-        } else {
-          logoutAccount();
-        }
-
-        return;
-      }
-
-      openAuthModal("login");
-    }
-
-    function openAuthModal(mode = "login") {
-      authMode = mode;
-
-      document.getElementById("auth-modal").classList.add("open");
-      clearAuthForm();
-      updateAuthModal();
-    }
-
-    function clearAuthForm() {
-      document.getElementById("auth-name").value = "";
-      document.getElementById("auth-email").value = "";
-      document.getElementById("auth-password").value = "";
-      document.getElementById("auth-password-repeat").value = "";
-      document.getElementById("auth-error").textContent = "";
-      document.getElementById("auth-error").classList.remove("show");
-    }
-
-    function setAuthMode(mode) {
-      authMode = mode;
-      clearAuthForm();
-      updateAuthModal();
-    }
-
-    function updateAuthModal() {
-      const isRegister = authMode === "register";
-
-      document.getElementById("auth-title").textContent =
-        isRegister ? "Регистрация" : "Вход";
-
-      document.getElementById("auth-submit-button").textContent =
-        isRegister ? "Зарегистрироваться" : "Войти";
-
-      document.getElementById("register-name-group")
-        .classList.toggle("hidden", !isRegister);
-
-      document.getElementById("register-repeat-group")
-        .classList.toggle("hidden", !isRegister);
-
-      document.getElementById("login-tab")
-        .classList.toggle("active", !isRegister);
-
-      document.getElementById("register-tab")
-        .classList.toggle("active", isRegister);
-    }
-
-    function showAuthError(message) {
-      const error = document.getElementById("auth-error");
-
-      error.textContent = message;
-      error.classList.add("show");
-    }
-
-    function submitAuth() {
-      const email = document
-        .getElementById("auth-email")
-        .value
-        .trim()
-        .toLowerCase();
-
-      const password = document.getElementById("auth-password").value;
-
-      if (!email || !password) {
-        showAuthError("Заполни email и пароль.");
-        return;
-      }
-
-      if (!email.includes("@")) {
-        showAuthError("Введи корректный email.");
-        return;
-      }
-
-      if (authMode === "register") {
-        const name = document.getElementById("auth-name").value.trim();
-        const repeatPassword = document.getElementById(
-          "auth-password-repeat"
-        ).value;
-
-        if (!name) {
-          showAuthError("Введи имя.");
-          return;
-        }
-
-        if (password.length < 6) {
-          showAuthError("Пароль должен содержать минимум 6 символов.");
-          return;
-        }
-
-        if (password !== repeatPassword) {
-          showAuthError("Пароли не совпадают.");
-          return;
-        }
-
-        const existingAccount = accounts.find(
-          account => account.email === email
-        );
-
-        if (existingAccount) {
-          showAuthError("Аккаунт с таким email уже существует.");
-          return;
-        }
-
-        const account = {
-          id: createId(),
-          name,
-          email,
-          password,
-          city: "",
-          about: "",
-          avatar: "",
-          createdAt: Date.now()
-        };
-
-        accounts.push(account);
-        currentAccount = account;
-
-        saveData("trade_accounts", accounts);
-        saveData("trade_current_account", currentAccount);
-
-        profile = {
-          name: account.name,
-          city: account.city,
-          about: account.about,
-          avatar: account.avatar
-        };
-
-        saveData("trade_profile", profile);
-
-        closeModal("auth-modal");
-        updateAuthButton();
-        updateProfileView();
-
-        showToast("Регистрация выполнена.");
-        return;
-      }
-
-      const account = accounts.find(
-        item => item.email === email && item.password === password
-      );
-
-      if (!account) {
-        showAuthError("Неверный email или пароль.");
-        return;
-      }
-
-      loginAccount(account);
-    }
-
-    function loginAccount(account) {
-      currentAccount = account;
-
-      profile = {
-        name: account.name || "",
-        city: account.city || "",
-        about: account.about || "",
-        avatar: account.avatar || ""
-      };
-
-      saveData("trade_current_account", currentAccount);
-      saveData("trade_profile", profile);
-
-      closeModal("auth-modal");
-      updateAuthButton();
-      updateProfileView();
-
-      showToast("Вы успешно вошли.");
-    }
-
-    function logoutAccount() {
-      currentAccount = null;
-      saveData("trade_current_account", null);
-      updateAuthButton();
-      showToast("Вы вышли из аккаунта.");
-    }
-
-    function updateAuthButton() {
-      const button = document.getElementById("auth-button");
-
-      if (currentAccount) {
-        button.textContent = "👤 " + currentAccount.name;
-        button.classList.remove("secondary");
-      } else {
-        button.textContent = "Войти";
-        button.classList.add("secondary");
-      }
-    }
-
-    function requireAuth() {
-      if (!currentAccount) {
-        openAuthModal("login");
-        showAuthError("Сначала войди или зарегистрируйся.");
-        return false;
-      }
-
+  function requireAuth(actionText = "Эта функция") {
+    if (isLoggedIn()) {
       return true;
     }
 
-    /*
-      ==========================
-      Товары
-      ==========================
-    */
+    showToast(`${actionText} доступна после входа`);
+    openAuthModal("login");
+    return false;
+  }
 
-    function getStatusText(status) {
-      const statuses = {
-        available: "Доступно",
-        pending: "В процессе",
-        traded: "Обменено"
+  function getCurrentUserData() {
+    if (!currentUser) {
+      return null;
+    }
+
+    return users.find(user => user.email === currentUser.email) || null;
+  }
+
+  function saveCurrentUserData() {
+    if (!currentUser) {
+      return;
+    }
+
+    const index = users.findIndex(user => user.email === currentUser.email);
+
+    if (index >= 0) {
+      users[index] = {
+        ...users[index],
+        profile,
+        password: users[index].password
       };
 
-      return statuses[status] || status;
+      saveData("trade_users", users);
+    }
+  }
+
+  function loadUserWorkspace() {
+    if (!currentUser) {
+      return;
     }
 
-    function getProductCard(product) {
-      const isFavorite = favorites.includes(product.id);
-      const isOwner =
-        currentAccount &&
-        product.ownerId === currentAccount.id;
+    const user = getCurrentUserData();
 
-      const image = product.image ||
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80";
-
-      return `
-        <article class="product-card">
-          <div class="product-image">
-            <img
-              src="${escapeHtml(image)}"
-              alt="${escapeHtml(product.title)}"
-              onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80'"
-            />
-
-            <button
-              class="favorite-button"
-              onclick="toggleFavorite('${product.id}')"
-              title="Добавить в избранное"
-            >
-              ${isFavorite ? "❤️" : "♡"}
-            </button>
-          </div>
-
-          <div class="product-info">
-            <h3>${escapeHtml(product.title)}</h3>
-
-            <div class="product-description">
-              ${escapeHtml(product.description || "Описание отсутствует")}
-            </div>
-
-            <div class="product-meta">
-              <span>${escapeHtml(product.category)}</span>
-              <span>${escapeHtml(product.city || "Город не указан")}</span>
-            </div>
-
-            <div style="margin-bottom: 12px;">
-              <span class="status ${escapeHtml(product.status)}">
-                ${getStatusText(product.status)}
-              </span>
-            </div>
-
-            <div class="product-footer">
-              <small style="color: var(--muted);">
-                ${escapeHtml(product.condition || "Состояние не указано")}
-              </small>
-
-              <div style="display: flex; gap: 6px;">
-                ${
-                  isOwner
-                    ? `
-                      <button
-                        class="button secondary small"
-                        onclick="editProduct('${product.id}')"
-                      >
-                        Изменить
-                      </button>
-
-                      <button
-                        class="button danger small"
-                        onclick="deleteProduct('${product.id}')"
-                      >
-                        Удалить
-                      </button>
-                    `
-                    : product.status === "available"
-                      ? `
-                        <button
-                          class="button small"
-                          onclick="openOffer('${product.id}')"
-                        >
-                          Обмен
-                        </button>
-                      `
-                      : ""
-                }
-              </div>
-            </div>
-          </div>
-        </article>
-      `;
+    if (!user) {
+      return;
     }
 
-    function renderHomeProducts() {
-      const container = document.getElementById("home-products");
+    profile = user.profile || {
+      name: user.name,
+      city: "Город не указан",
+      about: "Пока ничего не рассказано о себе.",
+      avatar: DEFAULT_AVATAR
+    };
 
-      const latest = [...products]
-        .sort((a, b) => b.createdAt - a.createdAt)
-        .slice(0, 4);
+    const key = currentUser.email;
 
-      if (latest.length === 0) {
-        container.innerHTML = `
-          <div class="empty">
-            Пока нет объявлений.
-          </div>
-        `;
-        return;
-      }
+    favorites = loadData(`trade_favorites_${key}`, []);
+    offers = loadData(`trade_offers_${key}`, []);
+    messages = loadData(`trade_messages_${key}`, []);
+    history = loadData(`trade_history_${key}`, []);
+    wishes = loadData(`trade_wishes_${key}`, []);
+    notifications = loadData(`trade_notifications_${key}`, []);
+    reviews = loadData(`trade_reviews_${key}`, []);
+  }
 
-      container.innerHTML = latest
-        .map(product => getProductCard(product))
-        .join("");
+  function saveUserWorkspace() {
+    if (!currentUser) {
+      return;
     }
 
-    function renderCategories() {
-      const container = document.getElementById("categories");
+    const key = currentUser.email;
 
-      const categories = [
-        "all",
-        ...new Set(products.map(product => product.category))
-      ];
+    saveData(`trade_favorites_${key}`, favorites);
+    saveData(`trade_offers_${key}`, offers);
+    saveData(`trade_messages_${key}`, messages);
+    saveData(`trade_history_${key}`, history);
+    saveData(`trade_wishes_${key}`, wishes);
+    saveData(`trade_notifications_${key}`, notifications);
+    saveData(`trade_reviews_${key}`, reviews);
+  }
 
-      container.innerHTML = categories
-        .map(category => {
-          const label = category === "all" ? "Все" : category;
-          const active = selectedCategory === category ? "active" : "";
+  function openAuthModal(mode = "login") {
+    authMode = mode;
+    switchAuthMode(mode);
+    clearAuthError();
 
-          return `
-            <button
-              class="category-button ${active}"
-              onclick="selectCategory('${escapeHtml(category)}')"
-            >
-              ${escapeHtml(label)}
-            </button>
-          `;
-        })
-        .join("");
-    }
+    document.getElementById("auth-email").value = "";
+    document.getElementById("auth-password").value = "";
+    document.getElementById("auth-name").value = "";
+    document.getElementById("auth-password-confirm").value = "";
 
-    function selectCategory(category) {
-      selectedCategory = category;
-      renderCategories();
-      renderProducts();
-    }
+    openModal("auth-modal");
+  }
 
-    function renderProducts() {
-      const container = document.getElementById("catalog-products");
+  function switchAuthMode(mode) {
+    authMode = mode;
 
-      let result = [...products];
+    const isRegister = mode === "register";
 
-      const search = (
-        document.getElementById("search-input")?.value || ""
-      ).trim().toLowerCase();
+    document.getElementById("auth-title").textContent =
+      isRegister ? "Регистрация" : "Вход";
 
-      const sort = document.getElementById("sort-select")?.value || "new";
-      const status = document.getElementById("status-filter")?.value || "all";
+    document.getElementById("auth-subtitle").textContent =
+      isRegister
+        ? "Создайте аккаунт, чтобы пользоваться TRADE."
+        : "Войдите, чтобы пользоваться всеми возможностями TRADE.";
 
-      if (search) {
-        result = result.filter(product => {
-          const text = [
-            product.title,
-            product.description,
-            product.category,
-            product.city
-          ]
-            .join(" ")
-            .toLowerCase();
+    document.getElementById("auth-submit").textContent =
+      isRegister ? "Создать аккаунт" : "Войти";
 
-          return text.includes(search);
-        });
-      }
+    document.getElementById("register-name-group")
+      .classList.toggle("hidden", !isRegister);
 
-      if (selectedCategory !== "all") {
-        result = result.filter(
-          product => product.category === selectedCategory
-        );
-      }
+    document.getElementById("register-password-group")
+      .classList.toggle("hidden", !isRegister);
 
-      if (status !== "all") {
-        result = result.filter(product => product.status === status);
-      }
+    document.getElementById("login-tab")
+      .classList.toggle("active", !isRegister);
 
-      if (sort === "new") {
-        result.sort((a, b) => b.createdAt - a.createdAt);
-      }
+    document.getElementById("register-tab")
+      .classList.toggle("active", isRegister);
 
-      if (sort === "old") {
-        result.sort((a, b) => a.createdAt - b.createdAt);
-      }
+    clearAuthError();
+  }
 
-      if (sort === "name") {
-        result.sort((a, b) => a.title.localeCompare(b.title, "ru"));
-      }
+  function showAuthError(text) {
+    const error = document.getElementById("auth-error");
+    error.textContent = text;
+    error.classList.add("show");
+  }
 
-      if (result.length === 0) {
-        container.innerHTML = `
-          <div class="empty">
-            По твоему запросу ничего не найдено.
-          </div>
-        `;
-        return;
-      }
+  function clearAuthError() {
+    const error = document.getElementById("auth-error");
+    error.textContent = "";
+    error.classList.remove("show");
+  }
 
-      container.innerHTML = result
-        .map(product => getProductCard(product))
-        .join("");
-    }
+  function submitAuth(event) {
+    event.preventDefault();
 
-    function renderFavorites() {
-      const container = document.getElementById("favorite-products");
+    const email = document
+      .getElementById("auth-email")
+      .value
+      .trim()
+      .toLowerCase();
 
-      const favoriteProducts = products.filter(product =>
-        favorites.includes(product.id)
-      );
+    const password = document
+      .getElementById("auth-password")
+      .value;
 
-      if (favoriteProducts.length === 0) {
-        container.innerHTML = `
-          <div class="empty">
-            Здесь пока нет избранных объявлений.
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = favoriteProducts
-        .map(product => getProductCard(product))
-        .join("");
-    }
-
-    function toggleFavorite(id) {
-      if (favorites.includes(id)) {
-        favorites = favorites.filter(item => item !== id);
-        showToast("Удалено из избранного.");
-      } else {
-        favorites.push(id);
-        showToast("Добавлено в избранное.");
-      }
-
-      saveData("trade_favorites", favorites);
-
-      renderHomeProducts();
-      renderProducts();
-      renderFavorites();
-    }
-
-    function openAddModal() {
-      if (!requireAuth()) {
-        return;
-      }
-
-      editingProductId = null;
-
-      document.getElementById("product-modal-title").textContent =
-        "Добавить объявление";
-
-      clearProductForm();
-      openModal("product-modal");
-    }
-
-    function clearProductForm() {
-      document.getElementById("product-title").value = "";
-      document.getElementById("product-description").value = "";
-      document.getElementById("product-category").value = "Электроника";
-      document.getElementById("product-condition").value = "Новое";
-      document.getElementById("product-city").value = profile.city || "";
-      document.getElementById("product-image").value = "";
-      document.getElementById("product-status").value = "available";
-    }
-
-    function saveProduct() {
-      if (!requireAuth()) {
-        return;
-      }
-
-      const title = document.getElementById("product-title").value.trim();
-      const description = document
-        .getElementById("product-description")
+    if (authMode === "register") {
+      const name = document
+        .getElementById("auth-name")
         .value
         .trim();
 
-      const category = document.getElementById("product-category").value;
-      const condition = document.getElementById("product-condition").value;
-      const city = document.getElementById("product-city").value.trim();
-      const image = document.getElementById("product-image").value.trim();
-      const status = document.getElementById("product-status").value;
+      const passwordConfirm = document
+        .getElementById("auth-password-confirm")
+        .value;
 
-      if (!title) {
-        showToast("Введи название вещи.");
+      if (!name) {
+        showAuthError("Введите имя пользователя.");
         return;
       }
 
-      if (editingProductId) {
-        products = products.map(product => {
-          if (product.id !== editingProductId) {
-            return product;
+      if (password.length < 4) {
+        showAuthError("Пароль должен содержать минимум 4 символа.");
+        return;
+      }
+
+      if (password !== passwordConfirm) {
+        showAuthError("Пароли не совпадают.");
+        return;
+      }
+
+      if (users.some(user => user.email === email)) {
+        showAuthError("Пользователь с таким email уже зарегистрирован.");
+        return;
+      }
+
+      const newUser = {
+        id: Date.now(),
+        email,
+        password,
+        name,
+        profile: {
+          name,
+          city: "Город не указан",
+          about: "Пока ничего не рассказано о себе.",
+          avatar: DEFAULT_AVATAR
+        }
+      };
+
+      users.push(newUser);
+      saveData("trade_users", users);
+
+      currentUser = {
+        email,
+        name
+      };
+
+      saveData("trade_current_user", currentUser);
+
+      profile = newUser.profile;
+      favorites = [];
+      offers = [];
+      messages = [];
+      history = [];
+      wishes = [];
+      notifications = [];
+      reviews = [];
+
+      saveUserWorkspace();
+
+      closeModal("auth-modal");
+      updateAuthUI();
+      updateProfileView();
+      renderProducts();
+
+      showToast("Регистрация прошла успешно");
+      return;
+    }
+
+    const user = users.find(item =>
+      item.email === email && item.password === password
+    );
+
+    if (!user) {
+      showAuthError("Неверный email или пароль.");
+      return;
+    }
+
+    currentUser = {
+      email: user.email,
+      name: user.name
+    };
+
+    saveData("trade_current_user", currentUser);
+
+    loadUserWorkspace();
+
+    closeModal("auth-modal");
+    updateAuthUI();
+    updateProfileView();
+    renderProducts();
+
+    showToast("Вы успешно вошли");
+  }
+
+  function logout() {
+    saveUserWorkspace();
+
+    currentUser = null;
+    localStorage.removeItem("trade_current_user");
+
+    closeAccountMenu();
+    closeModal("profile-modal");
+    closeModal("profile-edit-modal");
+
+    updateAuthUI();
+    updateProfileView();
+    renderProducts();
+
+    showToast("Вы вышли из аккаунта");
+  }
+
+  function updateAuthUI() {
+    const guestButtons = document.getElementById("guest-auth-buttons");
+    const accountWrapper = document.getElementById("account-wrapper");
+
+    if (currentUser) {
+      guestButtons.classList.add("hidden");
+      accountWrapper.classList.remove("hidden");
+
+      document.getElementById("header-avatar").src =
+        profile.avatar || DEFAULT_AVATAR;
+
+      document.getElementById("header-user-name").textContent =
+        profile.name || currentUser.name;
+    } else {
+      guestButtons.classList.remove("hidden");
+      accountWrapper.classList.add("hidden");
+    }
+  }
+
+  function toggleAccountMenu() {
+    document.getElementById("account-menu")
+      .classList.toggle("open");
+  }
+
+  function closeAccountMenu() {
+    document.getElementById("account-menu")
+      .classList.remove("open");
+  }
+
+  function openProfileEditFromMenu() {
+    if (!requireAuth("Редактирование профиля")) {
+      return;
+    }
+
+    openProfileEdit();
+  }
+
+  function setActiveNav(name) {
+    document.querySelectorAll("[data-nav]").forEach(button => {
+      button.classList.toggle(
+        "active",
+        button.dataset.nav === name
+      );
+    });
+  }
+
+  function goHome(event) {
+    if (event) {
+      event.preventDefault();
+    }
+
+    setActiveNav("home");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+
+  function goCatalog() {
+    setActiveNav("catalog");
+
+    document.getElementById("catalog").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
+
+  function getCategories() {
+    return [
+      "Все",
+      ...new Set(products.map(product => product.category))
+    ];
+  }
+
+  function renderCategories() {
+    const box = document.getElementById("categories");
+    box.innerHTML = "";
+
+    getCategories().forEach(category => {
+      const button = document.createElement("button");
+
+      button.className =
+        "category" +
+        (category === selectedCategory ? " active" : "");
+
+      button.textContent = category;
+
+      button.onclick = () => {
+        selectedCategory = category;
+        renderCategories();
+        renderProducts();
+      };
+
+      box.appendChild(button);
+    });
+  }
+
+  function getStatusText(status) {
+    if (status === "offers") return "Есть предложения";
+    if (status === "completed") return "Обмен завершён";
+    return "Доступно";
+  }
+
+  function getFilteredProducts() {
+    const query = document
+      .getElementById("search")
+      .value
+      .toLowerCase()
+      .trim();
+
+    const sort = document.getElementById("sort").value;
+    const statusFilter = document.getElementById("status-filter").value;
+
+    let result = products.filter(product => {
+      const searchableText = [
+        product.title,
+        product.category,
+        product.description,
+        product.wanted,
+        product.location,
+        product.user,
+        product.condition
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      const matchesSearch = searchableText.includes(query);
+
+      const matchesCategory =
+        selectedCategory === "Все" ||
+        product.category === selectedCategory;
+
+      const matchesStatus =
+        statusFilter === "all" ||
+        product.status === statusFilter;
+
+      return matchesSearch && matchesCategory && matchesStatus;
+    });
+
+    if (sort === "new") {
+      result.sort((a, b) => b.createdAt - a.createdAt);
+    }
+
+    if (sort === "old") {
+      result.sort((a, b) => a.createdAt - b.createdAt);
+    }
+
+    if (sort === "title") {
+      result.sort((a, b) =>
+        a.title.localeCompare(b.title, "ru")
+      );
+    }
+
+    return result;
+  }
+
+  function createProductCard(product) {
+    const card = document.createElement("article");
+    card.className = "card";
+
+    const isFavorite = favorites.includes(product.id);
+    const isMine = isLoggedIn() && product.user === profile.name;
+
+    card.innerHTML = `
+      <div class="visual">
+        <img
+          src="${escapeHtml(product.image || FALLBACK_IMAGE)}"
+          alt="${escapeHtml(product.title)}"
+          onerror="this.src='${FALLBACK_IMAGE}'"
+        >
+
+        <span class="tag">${escapeHtml(product.category)}</span>
+
+        <span class="status-badge">
+          ${escapeHtml(getStatusText(product.status))}
+        </span>
+
+        <button
+          class="heart ${isFavorite ? "active" : ""}"
+          onclick="toggleFavorite(${product.id}, event)"
+        >
+          ${isFavorite ? "♥" : "♡"}
+        </button>
+      </div>
+
+      <div class="card-body">
+        <h3>${escapeHtml(product.title)}</h3>
+
+        <p class="desc">
+          ${escapeHtml(product.description)}
+        </p>
+
+        <div class="meta">
+          <span>📍 ${escapeHtml(product.location || "Не указан")}</span>
+          <span>👤
+            <a href="#" onclick="openPublicProfile(event, '${escapeHtml(product.user)}')">
+              ${escapeHtml(product.user)}
+            </a>
+          </span>
+        </div>
+
+        <div class="meta">
+          <span>Состояние:</span>
+          <strong>${escapeHtml(product.condition || "Не указано")}</strong>
+        </div>
+
+        <div class="actions">
+          <button
+            class="secondary"
+            onclick="openProduct(${product.id})"
+          >
+            Подробнее
+          </button>
+
+          ${
+            product.status !== "completed" && !isMine
+              ? `
+                <button
+                  class="primary"
+                  onclick="openOffer(${product.id})"
+                >
+                  Обмен
+                </button>
+              `
+              : ""
           }
+        </div>
 
-          return {
-            ...product,
-            title,
-            description,
-            category,
-            condition,
-            city,
-            image,
-            status
-          };
-        });
+        ${
+          isMine
+            ? `
+              <div class="actions" style="margin-top:8px">
+                <button
+                  class="small-btn"
+                  onclick="editProduct(${product.id})"
+                >
+                  Изменить
+                </button>
 
-        showToast("Объявление обновлено.");
-      } else {
-        products.unshift({
-          id: createId(),
-          title,
-          description,
-          category,
-          condition,
-          city,
-          image,
-          status,
-          owner: currentAccount.name,
-          ownerId: currentAccount.id,
-          createdAt: Date.now()
-        });
-
-        showToast("Объявление добавлено.");
-      }
-
-      saveData("trade_products", products);
-
-      closeModal("product-modal");
-      renderCategories();
-      renderProducts();
-      renderHomeProducts();
-      renderMyProducts();
-    }
-
-    function editProduct(id) {
-      if (!requireAuth()) {
-        return;
-      }
-
-      const product = products.find(item => item.id === id);
-
-      if (!product) {
-        return;
-      }
-
-      if (product.ownerId !== currentAccount.id) {
-        showToast("Это не твоё объявление.");
-        return;
-      }
-
-      editingProductId = id;
-
-      document.getElementById("product-modal-title").textContent =
-        "Редактировать объявление";
-
-      document.getElementById("product-title").value = product.title;
-      document.getElementById("product-description").value =
-        product.description || "";
-      document.getElementById("product-category").value =
-        product.category || "Другое";
-      document.getElementById("product-condition").value =
-        product.condition || "Новое";
-      document.getElementById("product-city").value = product.city || "";
-      document.getElementById("product-image").value = product.image || "";
-      document.getElementById("product-status").value =
-        product.status || "available";
-
-      openModal("product-modal");
-    }
-
-    function deleteProduct(id) {
-      if (!requireAuth()) {
-        return;
-      }
-
-      const product = products.find(item => item.id === id);
-
-      if (!product || product.ownerId !== currentAccount.id) {
-        showToast("Нельзя удалить это объявление.");
-        return;
-      }
-
-      const confirmed = confirm(
-        "Ты действительно хочешь удалить объявление?"
-      );
-
-      if (!confirmed) {
-        return;
-      }
-
-      products = products.filter(item => item.id !== id);
-      favorites = favorites.filter(item => item !== id);
-
-      saveData("trade_products", products);
-      saveData("trade_favorites", favorites);
-
-      renderCategories();
-      renderProducts();
-      renderHomeProducts();
-      renderFavorites();
-      renderMyProducts();
-
-      showToast("Объявление удалено.");
-    }
-
-    /*
-      ==========================
-      Предложения обмена
-      ==========================
-    */
-
-    function openOffer(id) {
-      if (!requireAuth()) {
-        return;
-      }
-
-      const product = products.find(item => item.id === id);
-
-      if (!product) {
-        return;
-      }
-
-      if (product.ownerId === currentAccount.id) {
-        showToast("Нельзя предложить обмен самому себе.");
-        return;
-      }
-
-      if (product.status !== "available") {
-        showToast("Эта вещь сейчас недоступна для обмена.");
-        return;
-      }
-
-      selectedOfferProductId = id;
-
-      document.getElementById("offer-product-name").textContent =
-        "Объявление: " + product.title;
-
-      document.getElementById("offer-message").value = "";
-
-      openModal("offer-modal");
-    }
-
-    function submitOffer() {
-      if (!requireAuth()) {
-        return;
-      }
-
-      const product = products.find(
-        item => item.id === selectedOfferProductId
-      );
-
-      if (!product) {
-        return;
-      }
-
-      const message = document
-        .getElementById("offer-message")
-        .value
-        .trim();
-
-      if (!message) {
-        showToast("Напиши, что ты предлагаешь взамен.");
-        return;
-      }
-
-      offers.unshift({
-        id: createId(),
-        productId: product.id,
-        productTitle: product.title,
-        fromUserId: currentAccount.id,
-        fromUserName: currentAccount.name,
-        toUserId: product.ownerId,
-        toUserName: product.owner,
-        message,
-        status: "pending",
-        createdAt: Date.now()
-      });
-
-      saveData("trade_offers", offers);
-
-      chats.unshift({
-        id: createId(),
-        title: "Обмен: " + product.title,
-        message: message,
-        user: product.owner,
-        createdAt: Date.now()
-      });
-
-      saveData("trade_chats", chats);
-
-      closeModal("offer-modal");
-      renderOffers();
-      renderChats();
-
-      showToast("Предложение отправлено.");
-    }
-
-    function renderOffers() {
-      const container = document.getElementById("offers-list");
-
-      if (!currentAccount) {
-        container.innerHTML = `
-          <div class="empty">
-            Войди в аккаунт, чтобы просматривать предложения обмена.
-          </div>
-        `;
-        return;
-      }
-
-      const myOffers = offers.filter(offer =>
-        offer.fromUserId === currentAccount.id ||
-        offer.toUserId === currentAccount.id
-      );
-
-      if (myOffers.length === 0) {
-        container.innerHTML = `
-          <div class="empty">
-            Пока нет предложений обмена.
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = myOffers
-        .map(offer => {
-          const isIncoming = offer.toUserId === currentAccount.id;
-
-          return `
-            <div class="offer-item">
-              <div class="offer-item-info">
-                <h3>${escapeHtml(offer.productTitle)}</h3>
-                <p>
-                  ${isIncoming ? "От пользователя" : "Для пользователя"}:
-                  ${escapeHtml(
-                    isIncoming ? offer.fromUserName : offer.toUserName
-                  )}
-                </p>
-                <p style="margin-top: 6px;">
-                  ${escapeHtml(offer.message)}
-                </p>
-                <p style="margin-top: 6px;">
-                  Статус: ${escapeHtml(offer.status)}
-                </p>
+                <button
+                  class="small-btn"
+                  onclick="deleteProduct(${product.id})"
+                >
+                  Удалить
+                </button>
               </div>
-
-              ${
-                isIncoming && offer.status === "pending"
-                  ? `
-                    <div class="offer-actions">
-                      <button
-                        class="button success small"
-                        onclick="acceptOffer('${offer.id}')"
-                      >
-                        Принять
-                      </button>
-
-                      <button
-                        class="button danger small"
-                        onclick="rejectOffer('${offer.id}')"
-                      >
-                        Отклонить
-                      </button>
-                    </div>
-                  `
-                  : ""
-              }
-            </div>
-          `;
-        })
-        .join("");
-    }
-
-    function acceptOffer(id) {
-      const offer = offers.find(item => item.id === id);
-
-      if (!offer) {
-        return;
-      }
-
-      offers = offers.map(item => {
-        if (item.id === id) {
-          return {
-            ...item,
-            status: "accepted"
-          };
+            `
+            : ""
         }
+      </div>
+    `;
 
-        return item;
+    return card;
+  }
+
+  function renderProducts() {
+    const box = document.getElementById("products");
+    const result = getFilteredProducts();
+
+    box.innerHTML = "";
+
+    if (!result.length) {
+      box.innerHTML = `
+        <div class="empty">
+          <h3>Ничего не найдено</h3>
+          <p>Измените поисковый запрос или фильтры.</p>
+        </div>
+      `;
+    } else {
+      result.forEach(product => {
+        box.appendChild(createProductCard(product));
       });
-
-      products = products.map(product => {
-        if (product.id === offer.productId) {
-          return {
-            ...product,
-            status: "pending"
-          };
-        }
-
-        return product;
-      });
-
-      history.unshift({
-        id: createId(),
-        productTitle: offer.productTitle,
-        partner: offer.fromUserName,
-        status: "Принят обмен",
-        createdAt: Date.now()
-      });
-
-      saveData("trade_offers", offers);
-      saveData("trade_products", products);
-      saveData("trade_history", history);
-
-      renderOffers();
-      renderProducts();
-      renderHomeProducts();
-      renderHistory();
-
-      showToast("Обмен принят.");
     }
 
-    function rejectOffer(id) {
-      offers = offers.map(item => {
-        if (item.id === id) {
-          return {
-            ...item,
-            status: "rejected"
-          };
-        }
+    updateCounters();
+  }
 
-        return item;
-      });
+  function getUserReviews(userName) {
+    return reviews.filter(review => review.to === userName);
+  }
 
-      saveData("trade_offers", offers);
-      renderOffers();
+  function getUserRating(userName) {
+    const userReviews = getUserReviews(userName);
 
-      showToast("Предложение отклонено.");
+    if (!userReviews.length) {
+      return "—";
     }
 
-    /*
-      ==========================
-      Чат
-      ==========================
-    */
+    const sum = userReviews.reduce((total, review) => {
+      return total + Number(review.rating);
+    }, 0);
 
-    function renderChats() {
-      const container = document.getElementById("chat-list");
+    return (sum / userReviews.length).toFixed(1);
+  }
 
-      if (!currentAccount) {
-        container.innerHTML = `
-          <div class="empty">
-            Войди в аккаунт, чтобы просматривать чат.
-          </div>
-        `;
-        return;
-      }
+  function updateCounters() {
+    document.getElementById("stat-products").textContent =
+      products.filter(product => product.status !== "completed").length;
 
-      if (chats.length === 0) {
-        container.innerHTML = `
-          <div class="empty">
-            Пока нет сообщений.
-          </div>
-        `;
-        return;
-      }
+    document.getElementById("fav-count").textContent =
+      favorites.length ? `(${favorites.length})` : "";
 
-      container.innerHTML = chats
-        .map(chat => `
-          <div class="chat-item">
-            <div class="chat-item-info">
-              <h3>${escapeHtml(chat.title)}</h3>
-              <p>${escapeHtml(chat.user)}</p>
-              <p style="margin-top: 5px;">
-                ${escapeHtml(chat.message)}
-              </p>
-            </div>
+    document.getElementById("offer-count").textContent =
+      offers.length ? `(${offers.length})` : "";
 
-            <button
-              class="button secondary small"
-              onclick="replyToChat('${chat.id}')"
-            >
-              Ответить
-            </button>
-          </div>
-        `)
-        .join("");
-    }
+    const unread = notifications.filter(item => !item.read).length;
 
-    function replyToChat(id) {
-      const chat = chats.find(item => item.id === id);
+    document.getElementById("notification-count").textContent =
+      unread ? `(${unread})` : "";
 
-      if (!chat) {
-        return;
-      }
+    document.getElementById("my-products").textContent =
+      isLoggedIn()
+        ? products.filter(product => product.user === profile.name).length
+        : "0";
 
-      const message = prompt("Напиши ответ:");
+    document.getElementById("my-rating").textContent =
+      isLoggedIn() ? getUserRating(profile.name) : "—";
 
-      if (!message || !message.trim()) {
-        return;
-      }
+    document.getElementById("my-reviews").textContent =
+      isLoggedIn() ? getUserReviews(profile.name).length : "0";
 
-      chats.unshift({
-        id: createId(),
-        title: "Ответ: " + chat.title,
-        message: message.trim(),
-        user: currentAccount ? currentAccount.name : "Пользователь",
-        createdAt: Date.now()
-      });
+    document.getElementById("my-completed").textContent =
+      isLoggedIn()
+        ? history.filter(item =>
+            item.from === profile.name || item.to === profile.name
+          ).length
+        : "0";
+  }
 
-      saveData("trade_chats", chats);
-      renderChats();
+  function resetFilters() {
+    document.getElementById("search").value = "";
+    document.getElementById("sort").value = "new";
+    document.getElementById("status-filter").value = "all";
 
-      showToast("Ответ отправлен.");
-    }
+    selectedCategory = "Все";
 
-    /*
-      ==========================
-      Профиль
-      ==========================
-    */
+    renderCategories();
+    renderProducts();
+  }
 
-    function updateProfileView() {
-      const name = profile.name || "Гость";
-      const city = profile.city || "Город не указан";
-      const about = profile.about || "Описание отсутствует";
-
-      document.getElementById("profile-name-view").textContent = name;
-      document.getElementById("profile-city-view").textContent = city;
-      document.getElementById("profile-about-view").textContent = about;
-
-      document.getElementById("profile-name").value = profile.name || "";
-      document.getElementById("profile-city").value = profile.city || "";
-      document.getElementById("profile-about").value = profile.about || "";
-      document.getElementById("profile-avatar-url").value =
-        profile.avatar || "";
-
-      const avatar = document.getElementById("profile-avatar");
-
-      if (profile.avatar) {
-        avatar.innerHTML = `
-          <img
-            src="${escapeHtml(profile.avatar)}"
-            alt="Аватар"
-            onerror="this.style.display='none'"
-          />
-        `;
-      } else {
-        avatar.textContent = (name[0] || "?").toUpperCase();
-      }
-    }
-
-    function saveProfile() {
-      if (!requireAuth()) {
-        return;
-      }
-
-      profile = {
-        name: document.getElementById("profile-name").value.trim(),
-        city: document.getElementById("profile-city").value.trim(),
-        about: document.getElementById("profile-about").value.trim(),
-        avatar: document.getElementById("profile-avatar-url").value.trim()
-      };
-
-      if (!profile.name) {
-        showToast("Имя не может быть пустым.");
-        return;
-      }
-
-      saveData("trade_profile", profile);
-
-      currentAccount.name = profile.name;
-      currentAccount.city = profile.city;
-      currentAccount.about = profile.about;
-      currentAccount.avatar = profile.avatar;
-
-      accounts = accounts.map(account => {
-        if (account.id === currentAccount.id) {
-          return currentAccount;
-        }
-
-        return account;
-      });
-
-      saveData("trade_accounts", accounts);
-      saveData("trade_current_account", currentAccount);
-
-      products = products.map(product => {
-        if (product.ownerId === currentAccount.id) {
-          return {
-            ...product,
-            owner: currentAccount.name
-          };
-        }
-
-        return product;
-      });
-
-      saveData("trade_products", products);
-
-      updateProfileView();
-      updateAuthButton();
-      renderProducts();
-      renderHomeProducts();
-      renderMyProducts();
-
-      showToast("Профиль сохранён.");
-    }
-
-    function showProfileTab(tabName, button) {
-      document.querySelectorAll(".profile-tab").forEach(tab => {
-        tab.classList.add("hidden");
-      });
-
-      document
-        .getElementById("profile-tab-" + tabName)
-        .classList.remove("hidden");
-
-      document.querySelectorAll(".profile-menu button").forEach(item => {
-        item.classList.remove("active");
-      });
-
-      if (button) {
-        button.classList.add("active");
-      }
-
-      if (tabName === "my-products") {
-        renderMyProducts();
-      }
-
-      if (tabName === "history") {
-        renderHistory();
-      }
-
-      if (tabName === "wishlist") {
-        renderWishlist();
-      }
-    }
-
-    function renderMyProducts() {
-      const container = document.getElementById("my-products");
-
-      if (!currentAccount) {
-        container.innerHTML = `
-          <div class="empty">
-            Войди в аккаунт, чтобы увидеть свои объявления.
-          </div>
-        `;
-        return;
-      }
-
-      const myProducts = products.filter(
-        product => product.ownerId === currentAccount.id
-      );
-
-      if (myProducts.length === 0) {
-        container.innerHTML = `
-          <div class="empty">
-            У тебя пока нет объявлений.
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = myProducts
-        .map(product => getProductCard(product))
-        .join("");
-    }
-
-    function renderHistory() {
-      const container = document.getElementById("history-list");
-
-      if (history.length === 0) {
-        container.innerHTML = `
-          <div class="empty">
-            История обменов пока пуста.
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = history
-        .map(item => `
-          <div class="history-item">
-            <div class="history-item-info">
-              <h3>${escapeHtml(item.productTitle)}</h3>
-              <p>Партнёр: ${escapeHtml(item.partner)}</p>
-              <p>Статус: ${escapeHtml(item.status)}</p>
-            </div>
-
-            <small style="color: var(--muted);">
-              ${new Date(item.createdAt).toLocaleDateString("ru-RU")}
-            </small>
-          </div>
-        `)
-        .join("");
-    }
-
-    /*
-      ==========================
-      Список желаний
-      ==========================
-    */
-
-    function addWishlistItem() {
-      if (!requireAuth()) {
-        return;
-      }
-
-      const input = document.getElementById("wishlist-input");
-      const value = input.value.trim();
-
-      if (!value) {
-        showToast("Напиши, что ты ищешь.");
-        return;
-      }
-
-      wishlist.unshift({
-        id: createId(),
-        text: value,
-        createdAt: Date.now()
-      });
-
-      saveData("trade_wishlist", wishlist);
-
-      input.value = "";
-      renderWishlist();
-
-      showToast("Добавлено в список желаний.");
-    }
-
-    function renderWishlist() {
-      const container = document.getElementById("wishlist-list");
-
-      if (wishlist.length === 0) {
-        container.innerHTML = `
-          <div class="empty">
-            Список желаний пуст.
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = wishlist
-        .map(item => `
-          <div class="wishlist-item">
-            <span>${escapeHtml(item.text)}</span>
-
-            <button
-              class="button danger small"
-              onclick="removeWishlistItem('${item.id}')"
-            >
-              Удалить
-            </button>
-          </div>
-        `)
-        .join("");
-    }
-
-    function removeWishlistItem(id) {
-      wishlist = wishlist.filter(item => item.id !== id);
-      saveData("trade_wishlist", wishlist);
-      renderWishlist();
-      showToast("Удалено из списка желаний.");
-    }
-
-    /*
-      ==========================
-      Инициализация
-      ==========================
-    */
-
-    function init() {
-      initTheme();
-      renderCategories();
-      renderProducts();
-      renderHomeProducts();
-      renderFavorites();
-      renderOffers();
-      renderChats();
-      updateProfileView();
-      updateAuthButton();
-      renderMyProducts();
-      renderHistory();
-      renderWishlist();
-      showPage("home");
-    }
-
-    init();
-  </script>
-</body>
-</html>
+  function toggleFavorite(id, event) {
